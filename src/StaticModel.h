@@ -34,6 +34,12 @@ struct Mesh
 	std::vector<float>		mBitangents; 
 
 	std::vector<uint32_t>	mIndices;
+
+	unsigned int vao; //vertex array container
+	unsigned int vbo; //vertex buffer 
+	unsigned int nbo; //normal buffer
+	unsigned int tbo; //texcoord buffer
+	unsigned int ibo;
 };
 
 class StaticModel
@@ -43,6 +49,11 @@ public:
 
 	~StaticModel();
 
+	void draw();
+
 	std::map<std::string, Mesh> meshes;
 	std::map<std::string, Material> materials;
+
+private:
+	void setup();
 };

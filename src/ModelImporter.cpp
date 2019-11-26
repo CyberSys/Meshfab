@@ -194,7 +194,7 @@ StaticModel ModelImporter::Import_SM(const char * filepath)
 
 	// Convert Axis System to what is used in this example, if needed
 	FbxAxisSystem SceneAxisSystem = mScene->GetGlobalSettings().GetAxisSystem();
-	FbxAxisSystem OurAxisSystem(FbxAxisSystem::eZAxis, FbxAxisSystem::eParityOdd, FbxAxisSystem::eRightHanded);
+	FbxAxisSystem OurAxisSystem(FbxAxisSystem::eYAxis, FbxAxisSystem::eParityOdd, FbxAxisSystem::eRightHanded);
 	if (SceneAxisSystem != OurAxisSystem)
 	{
 		OurAxisSystem.ConvertScene(mScene);
