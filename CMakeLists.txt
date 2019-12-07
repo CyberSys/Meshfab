@@ -19,6 +19,21 @@ set(SOURCE_FILES
 	
 	src/MainWindow.h
 	src/MainWindow.cpp
+	
+	
+	src/imgui/imconfig.h
+	src/imgui/imgui.h
+	src/imgui/imgui.cpp
+	src/imgui/imgui_internal.h
+	src/imgui/imgui_impl_glfw.h
+	src/imgui/imgui_impl_glfw.cpp
+	src/imgui/imgui_impl_opengl3.h
+	src/imgui/imgui_impl_opengl3.cpp
+	src/imgui/imstb_truetype.h
+	src/imgui/imstb_textedit.h
+	src/imgui/imstb_rectpack.h
+	src/imgui/imgui_widgets.cpp
+	src/imgui/imgui_draw.cpp
 )
 
 # add library target

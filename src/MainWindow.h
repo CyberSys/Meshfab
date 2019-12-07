@@ -30,4 +30,6 @@ private:
 	GLFWwindow* m_window;
 
 	void InputListener();
+	void setup_imgui();
+	void render_imgui();
 };
