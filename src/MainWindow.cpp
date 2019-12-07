@@ -36,6 +36,12 @@ MainWindow::MainWindow(const char * title)
 
 MainWindow::~MainWindow()
 {
+	// Cleanup
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
+
+	glfwDestroyWindow(m_window);
 	glfwTerminate();
 }
 
