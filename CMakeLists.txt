@@ -11,11 +11,14 @@ set(HEADER_FILES
 set(SOURCE_FILES
 	src/main.cpp
 
-	src/ModelImporter.h
-	src/ModelImporter.cpp
+	#src/ModelImporter.h
+	#src/ModelImporter.cpp
 
-	src/StaticModel.h
-	src/StaticModel.cpp
+	#src/StaticModel.h
+	#src/StaticModel.cpp
+	
+	src/MainWindow.h
+	src/MainWindow.cpp
 )
 
 # add library target
@@ -33,9 +36,9 @@ target_link_libraries(Importer
 		opengl32
 		glew32
 		glfw3
-		libfbxsdk-md.lib
-		libxml2-md.lib
-		zlib-md.lib
+		#libfbxsdk-md.lib
+		#libxml2-md.lib
+		#zlib-md.lib
 )
 
 
@@ -91,6 +94,7 @@ target_include_directories(Importer
 	${CMAKE_CURRENT_SOURCE_DIR}/external/FBX/include
 	${CMAKE_CURRENT_SOURCE_DIR}/external/glm
 	${CMAKE_CURRENT_SOURCE_DIR}/external/stb_image
+	${CMAKE_CURRENT_SOURCE_DIR}/external/imgui
 	${CMAKE_CURRENT_SOURCE_DIR}/resources
 )
 
