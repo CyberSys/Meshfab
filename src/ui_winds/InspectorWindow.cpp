@@ -30,7 +30,7 @@ void InspectorWindow::render(void* render_texture)
 	ImVec4 curent_scale = ImVec4(m_scale.x, m_scale.y, m_scale.z, 1.00f);
 
 	{
-		ImGuiWindowFlags window_flags = 0;
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoMove;
 		window_flags |= ImGuiWindowFlags_NoCollapse;
 		ImGui::Begin("Transform", &show_window, window_flags);     // Create a window 
 		ImGui::InputFloat3("Translation", (float*)&curent_translation);

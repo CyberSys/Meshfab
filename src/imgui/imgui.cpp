@@ -4514,14 +4514,18 @@ static void FindHoveredWindow()
         ImGuiWindow* window = g.Windows[i];
         if (!window->Active || window->Hidden)
             continue;
+
         if (window->Flags & ImGuiWindowFlags_NoMouseInputs)
             continue;
+
         IM_ASSERT(window->Viewport);
+
         if (window->Viewport != g.MouseViewport)
             continue;
 
         // Using the clipped AABB, a child window will typically be clipped by its parent (not always)
         ImRect bb(window->OuterRectClipped);
+
         if (window->Flags & (ImGuiWindowFlags_ChildWindow | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize))
             bb.Expand(padding_regular);
         else

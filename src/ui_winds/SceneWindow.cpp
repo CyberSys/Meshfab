@@ -96,7 +96,7 @@ void SceneWindow::render(void* render_texture)
 {
 	bool show_window = true;
 
-	ImGuiWindowFlags window_flags = 0;
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoMove;
 	window_flags |= ImGuiWindowFlags_NoCollapse;
 
 	ImGui::Begin("Scene", &show_window, window_flags);     // Create a window 

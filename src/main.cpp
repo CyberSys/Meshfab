@@ -365,7 +365,7 @@ int main()
 		return -1;
 	}
 
-	initscene(scene_wind->width_get() , scene_wind->hieght_get());
+	initscene(mainwindow->GetWindowWidth() , mainwindow->GetWindowHeight());
 
 	// render loop
 	// -----------
@@ -378,13 +378,7 @@ int main()
 
 		mainwindow->WindowBeginFrame();
 
-		if (scene_wind->width_get() != view_size.x ||
-			scene_wind->hieght_get() != view_size.y)
-		{
-			update_framebuffer(scene_wind->width_get(), scene_wind->hieght_get());
-		}
-
-		void* id = scenerender(scene_wind->width_get(), scene_wind->hieght_get());
+		void* id = scenerender(mainwindow->GetWindowWidth() , mainwindow->GetWindowHeight());
 		mainwindow->SceneWind_Get()->render(id);
 		mainwindow->InspWind_Get()->render(id);
 
