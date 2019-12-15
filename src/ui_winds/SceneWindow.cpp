@@ -96,33 +96,22 @@ void SceneWindow::render(void* render_texture)
 {
 	bool show_window = true;
 
-	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
-	{
+	ImGuiWindowFlags window_flags = 0;
+	window_flags |= ImGuiWindowFlags_NoCollapse;
 
-		ImGuiWindowFlags window_flags = 0;
-		window_flags |= ImGuiWindowFlags_NoCollapse;
+	ImGui::Begin("Scene", &show_window, window_flags);     // Create a window 
+	ImVec2 windsize = ImGui::GetWindowSize();
+	m_width = (int)windsize.x;
+	m_height = (int)windsize.y;
 
-		ImGui::Begin("Scene", &show_window, window_flags);     // Create a window 
-		ImVec2 windsize = ImGui::GetWindowSize();
-		m_width = (int)windsize.x;
-		m_height = (int)windsize.y;
-
-		ImGui::GetWindowDrawList()->AddImage(
-			render_texture,
-			ImVec2(ImGui::GetCursorScreenPos()),
-			ImVec2(ImGui::GetCursorScreenPos().x + m_width,
-				ImGui::GetCursorScreenPos().y + m_height), ImVec2(0, 1), ImVec2(1, 0));
+	ImGui::GetWindowDrawList()->AddImage(
+		render_texture,
+		ImVec2(ImGui::GetCursorScreenPos()),
+		ImVec2(ImGui::GetCursorScreenPos().x + m_width,
+			ImGui::GetCursorScreenPos().y + m_height), ImVec2(0, 1), ImVec2(1, 0));
 
 
-		ImGui::End();
-	}
-
-	//{
-	//	ImGuiWindowFlags window_flags = 0;
-	//	window_flags |= ImGuiWindowFlags_NoCollapse;
-	//	ImGui::Begin("render", &show_window, window_flags);     // Create a window 
-	//	ImGui::End();
-	//}
+	ImGui::End();
 }
 
 int SceneWindow::width_get()

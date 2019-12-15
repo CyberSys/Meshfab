@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
 
-project ("Fbx-Importer")
+project ("Meshfab-Viewer")
 
 # list the header files
 set(HEADER_FILES
@@ -17,8 +17,23 @@ set(SOURCE_FILES
 	#src/StaticModel.h
 	#src/StaticModel.cpp
 	
-	src/MainWindow.h
-	src/MainWindow.cpp
+	src/ui_winds/MainWindow.h
+	src/ui_winds/MainWindow.cpp
+	src/ui_winds/SceneWindow.h
+	src/ui_winds/SceneWindow.cpp
+	src/ui_winds/InspectorWindow.h
+	src/ui_winds/InspectorWindow.cpp
+
+	src/GeoShapes/Shape3D.h
+	src/GeoShapes/Shape3D.cpp
+	src/GeoShapes/private/cube.h
+	src/GeoShapes/private/cube.cpp
+	
+	src/shader.h
+	src/shader.cpp
+	src/camera.h
+	src/camera.cpp
+
 	
 	
 	src/imgui/imconfig.h
@@ -34,10 +49,12 @@ set(SOURCE_FILES
 	src/imgui/imstb_rectpack.h
 	src/imgui/imgui_widgets.cpp
 	src/imgui/imgui_draw.cpp
+	src/imgui/ImGuizmo.h
+	src/imgui/ImGuizmo.cpp
 )
 
 # add library target
-add_executable(Importer
+add_executable(MF-Viewer
 	${HEADER_FILES}
 	${SOURCE_FILES}
 )
@@ -46,7 +63,7 @@ add_executable(Importer
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${HEADER_FILES})
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCE_FILES})
 
-target_link_libraries(Importer
+target_link_libraries(MF-Viewer
 	PUBLIC
 		opengl32
 		glew32
@@ -60,30 +77,30 @@ target_link_libraries(Importer
 if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 
 	add_custom_command(
-    TARGET Importer POST_BUILD
+    TARGET MF-Viewer POST_BUILD
 	
 	COMMAND ${CMAKE_COMMAND} -E copy 
 	${CMAKE_CURRENT_SOURCE_DIR}/external/glew/bin/x64/glew32.dll
-	$<TARGET_FILE_DIR:Importer>
+	$<TARGET_FILE_DIR:MF-Viewer>
 )
 else("${CMAKE_SIZEOF_VOID_P}" EQUAL "4")
 add_custom_command(
-    TARGET Importer POST_BUILD
+    TARGET MF-Viewer POST_BUILD
 	
 	COMMAND ${CMAKE_COMMAND} -E copy 
 	${CMAKE_CURRENT_SOURCE_DIR}/external/glew/bin/Win32/glew32.dll
-	$<TARGET_FILE_DIR:Importer>
+	$<TARGET_FILE_DIR:MF-Viewer>
 )
 
 ENDIF()
 
 
 if(WIN32)
-	target_compile_definitions(Importer
+	target_compile_definitions(MF-Viewer
 		PRIVATE
 			OS_WINDOWS=1
 	)
-	target_compile_options(Importer
+	target_compile_options(MF-Viewer
 		PRIVATE
 			/WX
 	)
@@ -92,14 +109,14 @@ endif(WIN32)
 # enable C++17
 # disable any compiler specifc extensions
 # add d suffix in debug mode
-target_compile_features(Importer PUBLIC cxx_std_17)
-set_target_properties(Importer PROPERTIES
+target_compile_features(MF-Viewer PUBLIC cxx_std_17)
+set_target_properties(MF-Viewer PROPERTIES
 	CXX_EXTENSIONS OFF
 )
 
 
 # list include directories
-target_include_directories(Importer
+target_include_directories(MF-Viewer
 	PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 	${CMAKE_CURRENT_SOURCE_DIR}/include/Renderer3D
@@ -116,7 +133,7 @@ target_include_directories(Importer
 # list Libs directories
 if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 	message(STATUS "Target is 64 bits")
-	target_link_directories (Importer
+	target_link_directories (MF-Viewer
 	PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/external/glew/lib/x64
     ${CMAKE_CURRENT_SOURCE_DIR}/external/glfw/lib/$<CONFIG>/x64lib/
@@ -124,7 +141,7 @@ if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 )	
 else("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 	message(STATUS "Target is 32 bits")
-		target_link_directories (Importer
+		target_link_directories (MF-Viewer
 	PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/external/glew/lib/Win32
 	${CMAKE_CURRENT_SOURCE_DIR}/external/glfw/lib/$<CONFIG>/win32lib/
