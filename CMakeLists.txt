@@ -11,46 +11,29 @@ set(HEADER_FILES
 set(SOURCE_FILES
 	src/main.cpp
 
-	#src/ModelImporter.h
-	#src/ModelImporter.cpp
-
-	#src/StaticModel.h
-	#src/StaticModel.cpp
-	
-	src/ui_winds/MainWindow.h
-	src/ui_winds/MainWindow.cpp
-	src/ui_winds/SceneWindow.h
-	src/ui_winds/SceneWindow.cpp
-	src/ui_winds/InspectorWindow.h
-	src/ui_winds/InspectorWindow.cpp
-
 	src/GeoShapes/Shape3D.h
 	src/GeoShapes/Shape3D.cpp
 	src/GeoShapes/private/cube.h
 	src/GeoShapes/private/cube.cpp
+	src/GeoShapes/private/GPUBufferID.h
 	
-	src/shader.h
-	src/shader.cpp
+	src/Materials/Materials.h
+	src/Materials/Materials.cpp
+	src/Materials/Private/ShaderProgram.h
+	src/Materials/Private/ShaderProgram.cpp
+	src/Materials/Private/ColoredMaterial.h
+	src/Materials/Private/ColoredMaterial.cpp
+	
+	src/App.h
+	src/App.cpp
+	src/Scene3D.h
+	src/Scene3D.cpp
+	src/SceneObject.h
+	src/SceneObject.cpp
 	src/camera.h
 	src/camera.cpp
-
-	
-	
-	src/imgui/imconfig.h
-	src/imgui/imgui.h
-	src/imgui/imgui.cpp
-	src/imgui/imgui_internal.h
-	src/imgui/imgui_impl_glfw.h
-	src/imgui/imgui_impl_glfw.cpp
-	src/imgui/imgui_impl_opengl3.h
-	src/imgui/imgui_impl_opengl3.cpp
-	src/imgui/imstb_truetype.h
-	src/imgui/imstb_textedit.h
-	src/imgui/imstb_rectpack.h
-	src/imgui/imgui_widgets.cpp
-	src/imgui/imgui_draw.cpp
-	src/imgui/ImGuizmo.h
-	src/imgui/ImGuizmo.cpp
+	src/FrameBuffer.h
+	src/FrameBuffer.cpp
 )
 
 # add library target
