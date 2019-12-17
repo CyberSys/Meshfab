@@ -1,5 +1,5 @@
 #pragma once
-#include "private/GPUBufferID.h"
+#include "private/GeomtryInfo.h"
 
 /*
 * this class responsible for generating geomtery 
@@ -14,5 +14,5 @@ public:
 
 	~Shape3D();
 
-	static GPUBufferID Create_Cube();
+	static GeomtryInfo Create_Cube();
 };

@@ -5,7 +5,7 @@
 * after generation will need to hold all buffers id
 */
 
-struct GPUBufferID
+struct GeomtryInfo
 {
 	unsigned int vao;
 	unsigned int vbo;

@@ -9,7 +9,7 @@ Shape2D::~Shape2D()
 {
 }
 
-GPUBufferID Shape2D::Create_Quad()
+GeomtryInfo Shape2D::Create_Quad()
 {
 	Quad quad;
 

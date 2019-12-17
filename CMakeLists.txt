@@ -19,7 +19,7 @@ set(SOURCE_FILES
 	src/GeoShapes/private/cube.cpp
 	src/GeoShapes/private/Quad.h
 	src/GeoShapes/private/Quad.cpp
-	src/GeoShapes/private/GPUBufferID.h
+	src/GeoShapes/private/GeomtryInfo.h
 	
 	src/Materials/Materials.h
 	src/Materials/Materials.cpp
@@ -44,6 +44,8 @@ set(SOURCE_FILES
 	src/Framerenderer.cpp
 	src/Transform.h
 	src/Transform.cpp
+	src/renderer.h
+	src/renderer.cpp
 )
 
 # add library target

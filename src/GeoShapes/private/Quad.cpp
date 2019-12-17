@@ -5,7 +5,7 @@ Quad::Quad() {}
 
 Quad::~Quad() {}
 
-GPUBufferID Quad::Generate()
+GeomtryInfo Quad::Generate()
 {
 	float quadVertices[] = {
 	// positions   // texCoords
@@ -18,7 +18,7 @@ GPUBufferID Quad::Generate()
 	 1.0f,  1.0f,  1.0f, 1.0f
 	};
 
-	GPUBufferID result;
+	GeomtryInfo result;
 
 	glGenVertexArrays(1, &result.vao);
 	glGenBuffers(1, &result.vbo);

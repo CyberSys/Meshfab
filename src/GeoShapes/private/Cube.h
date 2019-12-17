@@ -1,5 +1,5 @@
 #pragma once
-#include "GPUBufferID.h"
+#include "GeomtryInfo.h"
 
 /*
 * this class is definition for cube geomtry
@@ -12,5 +12,5 @@ public:
 	Cube();
 	~Cube();
 
-	GPUBufferID Generate();
+	GeomtryInfo Generate();
 };

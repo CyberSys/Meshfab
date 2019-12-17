@@ -7,7 +7,7 @@ Shape3D::~Shape3D() {}
 
 ///////////////////////////////////// Creators
 
-GPUBufferID Shape3D::Create_Cube()
+GeomtryInfo Shape3D::Create_Cube()
 {
 	Cube cube;
 

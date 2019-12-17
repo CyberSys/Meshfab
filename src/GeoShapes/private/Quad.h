@@ -1,5 +1,5 @@
 #pragma once
-#include "GPUBufferID.h"
+#include "GeomtryInfo.h"
 
 class Quad
 {
@@ -8,5 +8,5 @@ public:
 
 	~Quad();
 
-	GPUBufferID Generate();
+	GeomtryInfo Generate();
 };

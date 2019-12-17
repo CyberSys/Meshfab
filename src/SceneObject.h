@@ -1,5 +1,5 @@
 #pragma once
-#include "GeoShapes/private/GPUBufferID.h"
+#include "GeoShapes/private/GeomtryInfo.h"
 #include "Transform.h"
 #include <string>
 
@@ -14,7 +14,7 @@ public:
 
 	Transform transformation;
 
-	GPUBufferID buffers;
+	GeomtryInfo buffers;
 	std::string name;
 	std::string materialName;
 };

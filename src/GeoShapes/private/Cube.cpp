@@ -6,7 +6,7 @@ Cube::Cube() {}
 
 Cube::~Cube() {}
 
-GPUBufferID Cube::Generate()
+GeomtryInfo Cube::Generate()
 {
 	float buf[] =
 	{
@@ -55,7 +55,7 @@ GPUBufferID Cube::Generate()
 	};
 
 
-	GPUBufferID result;
+	GeomtryInfo result;
 	result.num_vertices = 36;
 	result.num_faces = 6;
 	result.num_triangles = 12;
