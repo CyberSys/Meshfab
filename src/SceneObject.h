@@ -10,6 +10,8 @@ public:
 
 	~SceneObject();
 
+	glm::mat4 TransformMatrix(glm::mat4 vp);
+
 	Transform transformation;
 
 	GPUBufferID buffers;

@@ -9,4 +9,7 @@ struct GPUBufferID
 {
 	unsigned int vao;
 	unsigned int vbo;
+	int num_vertices;
+	int num_faces;
+	int num_triangles;
 };

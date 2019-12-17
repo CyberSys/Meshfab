@@ -28,5 +28,5 @@ private:
 	glm::mat4 view;
 	glm::mat4 projection;
 
-	std::vector<SceneObject*> objects;
+	SceneObject* obj;
 };

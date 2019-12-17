@@ -19,6 +19,8 @@ void Scene3D::init(int frame_width, int frame_height)
 
 	fb_renderer.init();
 
+	obj = new SceneObject();
+
 	//enable flags
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -37,7 +39,10 @@ void Scene3D::Render()
 	view = camera.GetViewMatrix();
 	projection = camera.GetProjectionMatrix( frame.AspectRatio());
 
-
+	//select material you want ...
+	materials.colored_material(obj->TransformMatrix(projection * view),glm::vec4(1,0,0,1));
+	glBindVertexArray(obj->buffers.vao);
+	glDrawArrays(GL_TRIANGLES, 0, obj->buffers.num_triangles);
 
 	frame.end();
 

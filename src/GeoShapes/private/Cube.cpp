@@ -56,6 +56,9 @@ GPUBufferID Cube::Generate()
 
 
 	GPUBufferID result;
+	result.num_vertices = 36;
+	result.num_faces = 6;
+	result.num_triangles = 12;
 
 	glGenVertexArrays(1, &result.vao);
 	glGenBuffers(1, &result.vbo);
