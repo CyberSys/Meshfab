@@ -22,7 +22,7 @@ public:
 
 	static void mouse_scroll(double xoffset, double yoffset);
 
-	static void resize(int width, int height);
+	void resize();
 
 private:
 	GLFWwindow* window;
@@ -30,4 +30,6 @@ private:
 	int window_height;
 
 	Scene3D scene3d;
+
+	void frameresize(int width, int height);
 };

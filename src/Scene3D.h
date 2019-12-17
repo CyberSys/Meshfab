@@ -16,9 +16,7 @@ public:
 
 	void* Render();
 
-	void update();
-
-	void input();
+	void resize(int newwidth, int newheight);
 
 private:
 	Frambuffer frame;

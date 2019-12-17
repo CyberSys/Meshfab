@@ -4,6 +4,14 @@
 
 Materials::Materials()
 {
+}
+
+Materials::~Materials()
+{
+}
+
+void Materials::init()
+{
 	//add colored shader
 	ColoredMaterial material;
 	int id = material.Create();
@@ -12,11 +20,6 @@ Materials::Materials()
 	//add diffuse shader
 
 	//and so on..
-
-}
-
-Materials::~Materials()
-{
 }
 
 void Materials::colored_material(glm::mat4 mvp, glm::vec4 color)
@@ -26,5 +29,5 @@ void Materials::colored_material(glm::mat4 mvp, glm::vec4 color)
 	program.ID = programs["colored"];
 	program.use();
 	program.setMat4("mvp", mvp);
-	program.setVec4("color",color);
+	program.setVec4("color", color);
 }

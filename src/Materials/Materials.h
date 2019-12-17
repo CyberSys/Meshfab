@@ -15,6 +15,8 @@ public:
 
 	~Materials();
 
+	void init();
+
 	void colored_material(glm::mat4 mvp, glm::vec4 color);
 
 	std::map<std::string, unsigned int> programs;

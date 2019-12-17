@@ -48,6 +48,20 @@ void Frambuffer::Create(int width, int height)
 	glBindFramebuffer(GL_FRAMEBUFFER, prev_framebuffer);
 }
 
+void Frambuffer::resize(int newwidth, int newheight)
+{
+	m_width = newwidth;
+	m_height = newheight;
+
+	//delete old textures 
+	glDeleteFramebuffers(1, &m_id);
+	glDeleteTextures(1,&colortexture);
+	glDeleteRenderbuffers(1,&depthtexture);
+
+	//recreate textures with new size
+	Create(newwidth,newheight);
+}
+
 unsigned int Frambuffer::ColorTexture_Get()
 {
 	return colortexture;

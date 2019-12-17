@@ -9,6 +9,8 @@ public:
 
 	void Create(int width, int height);
 
+	void resize(int newwidth, int newheight);
+
 	unsigned int ColorTexture_Get();
 
 	unsigned int DepthTexture_Get();

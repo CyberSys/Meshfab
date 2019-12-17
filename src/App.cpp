@@ -1,10 +1,5 @@
 #include "App.h"
 
-void resize_callback(GLFWwindow* window, int width, int height)
-{
-	Application::resize(width,height);
-}
-
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	Application::mouse_position(xpos, ypos);
@@ -32,7 +27,6 @@ Application::Application() :
 		glfwTerminate();
 	}
 	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, resize_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 
@@ -40,6 +34,8 @@ Application::Application() :
 	{
 		std::cout << "Failed to initialize GLEW" << std::endl;
 	}
+
+	scene3d.init(window_width,window_height);
 }
 
 Application::~Application()
@@ -51,8 +47,13 @@ void Application::run()
 {
 	while (!glfwWindowShouldClose(window))
 	{
+		//check for resizing first..
+		resize();
+
 		glClearColor(0.0f, 0.4f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		scene3d.Render();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -74,7 +75,18 @@ void Application::mouse_scroll(double xoffset, double yoffset)
 {
 }
 
-void Application::resize(int width, int height)
+void Application::resize()
 {
-	glViewport(0, 0, width, height);
+	int width, height;
+	glfwGetFramebufferSize(window, &width, &height);
+
+	//if resized ..
+	if(width != window_width || height != window_height)
+	{
+		window_width = width;
+		window_height = height;
+
+		glViewport(0, 0, width, height);
+		scene3d.resize(width,height);
+	}
 }

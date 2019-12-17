@@ -19,6 +19,8 @@ unsigned int vao;
 
 void Scene3D::init(int frame_width, int frame_height)
 {
+	materials.init();
+
 	frame.Create(frame_width, frame_height);
 
 	//init geomtrey
@@ -34,7 +36,7 @@ void* Scene3D::Render()
 	glEnable(GL_DEPTH_TEST);
 
 	//always clear to zeros ..
-	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.2f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//render all you want here 
@@ -54,4 +56,9 @@ void* Scene3D::Render()
 	//then return final image..
 	frame.Use_Prevframe();
 	return (void*)frame.ColorTexture_Get();
+}
+
+void Scene3D::resize(int newwidth, int newheight)
+{
+	frame.resize(newwidth,newheight);
 }
