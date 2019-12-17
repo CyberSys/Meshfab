@@ -17,9 +17,9 @@ public:
 
 	float AspectRatio();
 
-	void Use();
+	void begin();
 
-	void Use_Prevframe();
+	void end();
 
 private:
 	unsigned int m_id;

@@ -77,13 +77,13 @@ float Frambuffer::AspectRatio()
 	return (float)(m_width) / (float)(m_height);
 }
 
-void Frambuffer::Use()
+void Frambuffer::begin()
 {
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prev_frame);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_id);
 }
 
-void Frambuffer::Use_Prevframe()
+void Frambuffer::end()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, prev_frame);
 	prev_frame = 0;

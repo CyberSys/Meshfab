@@ -42,7 +42,7 @@ void drawcube(Materials& materials, glm::mat4 mvp)
 void Scene3D::Render()
 {
 	//use frame buffer to render to it
-	frame.Use();
+	frame.begin();
 
 	//enable flags
 	glEnable(GL_DEPTH_TEST);
@@ -60,7 +60,7 @@ void Scene3D::Render()
 
 	drawcube(materials,mvp);
 
-	frame.Use_Prevframe();
+	frame.end();
 
 	materials.framerender_material(frame.ColorTexture_Get());
 	fb_renderer.render();
