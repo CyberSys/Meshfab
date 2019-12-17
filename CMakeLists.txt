@@ -42,6 +42,8 @@ set(SOURCE_FILES
 	src/FrameBuffer.cpp
 	src/Framerenderer.h
 	src/Framerenderer.cpp
+	src/Transform.h
+	src/Transform.cpp
 )
 
 # add library target

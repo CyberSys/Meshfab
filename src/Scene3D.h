@@ -25,6 +25,8 @@ private:
 	Camera camera;
 	Materials materials;
 
+	glm::mat4 view;
+	glm::mat4 projection;
 
-	std::vector<SceneObject> objects;
+	std::vector<SceneObject*> objects;
 };
