@@ -55,6 +55,7 @@ void Application::run()
 
 		scene3d.Render();
 
+
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

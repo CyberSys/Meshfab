@@ -19,5 +19,7 @@ public:
 
 	void colored_material(glm::mat4 mvp, glm::vec4 color);
 
+	void framerender_material(unsigned int frametexture);
+
 	std::map<std::string, unsigned int> programs;
 };

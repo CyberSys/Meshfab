@@ -23,11 +23,23 @@ void Scene3D::init(int frame_width, int frame_height)
 
 	frame.Create(frame_width, frame_height);
 
+	fb_renderer.init();
+
 	//init geomtrey
 	vao = sh.Create_Cube().vao;
 }
 
-void* Scene3D::Render()
+void drawcube(Materials& materials, glm::mat4 mvp)
+{
+	//select material you want ...
+	materials.colored_material(mvp,glm::vec4(1,0,0,1));
+
+	//select geom you want and draw it
+	glBindVertexArray(vao);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+}
+
+void Scene3D::Render()
 {
 	//use frame buffer to render to it
 	frame.Use();
@@ -46,16 +58,12 @@ void* Scene3D::Render()
 	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), frame.AspectRatio(), 0.1f, 1000.0f);
 	glm::mat4 mvp = projection * view * model;
 
-	//select material you want ...
-	materials.colored_material(mvp,glm::vec4(1,0,0,1));
+	drawcube(materials,mvp);
 
-	//select geom you want and draw it
-	glBindVertexArray(vao);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
-
-	//then return final image..
 	frame.Use_Prevframe();
-	return (void*)frame.ColorTexture_Get();
+
+	materials.framerender_material(frame.ColorTexture_Get());
+	fb_renderer.render();
 }
 
 void Scene3D::resize(int newwidth, int newheight)

@@ -8,7 +8,6 @@ Cube::~Cube() {}
 
 GPUBufferID Cube::Generate()
 {
-	//this buffer = 288 elemnt..
 	float buf[] =
 	{
 		// 1 back face
@@ -64,7 +63,7 @@ GPUBufferID Cube::Generate()
 	glBindVertexArray(result.vao);
 	glBindBuffer(GL_ARRAY_BUFFER, result.vbo);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 288, &buf, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(buf), &buf, GL_DYNAMIC_DRAW);
 
 	// vertex attribute
 	glEnableVertexAttribArray(0);

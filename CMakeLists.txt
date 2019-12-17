@@ -13,8 +13,12 @@ set(SOURCE_FILES
 
 	src/GeoShapes/Shape3D.h
 	src/GeoShapes/Shape3D.cpp
+	src/GeoShapes/Shape2D.h
+	src/GeoShapes/Shape2D.cpp
 	src/GeoShapes/private/cube.h
 	src/GeoShapes/private/cube.cpp
+	src/GeoShapes/private/Quad.h
+	src/GeoShapes/private/Quad.cpp
 	src/GeoShapes/private/GPUBufferID.h
 	
 	src/Materials/Materials.h
@@ -23,6 +27,8 @@ set(SOURCE_FILES
 	src/Materials/Private/ShaderProgram.cpp
 	src/Materials/Private/ColoredMaterial.h
 	src/Materials/Private/ColoredMaterial.cpp
+	src/Materials/Private/FramerenderMaterial.h
+	src/Materials/Private/FramerenderMaterial.cpp
 	
 	src/App.h
 	src/App.cpp
@@ -34,6 +40,8 @@ set(SOURCE_FILES
 	src/camera.cpp
 	src/FrameBuffer.h
 	src/FrameBuffer.cpp
+	src/Framerenderer.h
+	src/Framerenderer.cpp
 )
 
 # add library target
