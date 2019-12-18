@@ -3,14 +3,28 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-SceneObject::SceneObject()
+SceneObject::SceneObject(ObjectType otype, MaterialType mtype) :
+	name("object"),
+	color(glm::vec4(1))
 {
-	buffers = Shape3D::Create_Cube();
+	type_object = otype;
+
+	switch (otype)
+	{
+	case Empty:
+		break;
+	case Cube:
+		buffers = Shape3D::Create_Cube();
+		type_material = mtype;
+		break;
+	default:
+		break;
+	}
 }
 
 SceneObject::~SceneObject() {}
 
-glm::mat4 SceneObject::TransformMatrix(glm::mat4 vp)
+glm::mat4 SceneObject::TransformMatrix()
 {
 	transformation.matrix = glm::translate(transformation.matrix,transformation.position);
 
@@ -20,5 +34,5 @@ glm::mat4 SceneObject::TransformMatrix(glm::mat4 vp)
 
 	transformation.matrix = glm::scale(transformation.matrix,transformation.scale);
 
-	return vp * transformation.matrix;
+	return transformation.vp_matrix * transformation.matrix;
 }

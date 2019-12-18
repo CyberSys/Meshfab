@@ -13,13 +13,12 @@ Scene3D::~Scene3D()
 
 void Scene3D::init(int frame_width, int frame_height)
 {
-	materials.init();
+
+	renderer.init();
 
 	frame.Create(frame_width, frame_height);
 
-	fb_renderer.init();
-
-	obj = new SceneObject();
+	//addobject(ObjectType::Cube,MaterialType::Default);
 
 	//enable flags
 	glEnable(GL_DEPTH_TEST);
@@ -32,25 +31,31 @@ void Scene3D::Render()
 	frame.begin();
 
 	//always clear to zeros ..
-	glClearColor(0.0f, 0.2f, 0.0f, 1.0f);
+	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//render all you want here 
 	view = camera.GetViewMatrix();
 	projection = camera.GetProjectionMatrix( frame.AspectRatio());
 
-	//select material you want ...
-	materials.colored_material(obj->TransformMatrix(projection * view),glm::vec4(1,0,0,1));
-	glBindVertexArray(obj->buffers.vao);
-	glDrawArrays(GL_TRIANGLES, 0, obj->buffers.num_triangles);
+	for (size_t i = 0 ; i < objects.size(); ++i)
+	{
+		objects[i]->transformation.vp_matrix = projection * view;
+		renderer.draw(objects[i]);
+	}
 
 	frame.end();
 
-	materials.framerender_material(frame.ColorTexture_Get());
-	fb_renderer.render();
+	renderer.flush(frame.ColorTexture_Get());
 }
 
 void Scene3D::resize(int newwidth, int newheight)
 {
 	frame.resize(newwidth,newheight);
+}
+
+void Scene3D::addobject(ObjectType otype, MaterialType mtype)
+{
+	SceneObject* obj = new SceneObject(otype,mtype);
+	objects.push_back(obj);
 }

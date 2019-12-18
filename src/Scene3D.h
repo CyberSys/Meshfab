@@ -1,10 +1,8 @@
 #pragma once
 #include "FrameBuffer.h"
-#include "Framerenderer.h"
 #include "camera.h"
 #include "SceneObject.h"
-#include "Materials/Materials.h"
-
+#include "renderer.h"
 
 class Scene3D
 {
@@ -19,14 +17,15 @@ public:
 
 	void resize(int newwidth, int newheight);
 
+	void addobject(ObjectType otype, MaterialType mtype);
+
 private:
 	Frambuffer frame;
-	Framerenderer fb_renderer;
 	Camera camera;
-	Materials materials;
+	Renderer renderer;
 
 	glm::mat4 view;
 	glm::mat4 projection;
 
-	SceneObject* obj;
+	std::vector<SceneObject*> objects;
 };

@@ -1,5 +1,10 @@
 #pragma once
+#include "Framerenderer.h"
+#include "SceneObject.h"
+#include "Materials/Materials.h"
+
 #include <vector>
+using namespace std;
 
 class Renderer
 {
@@ -8,7 +13,12 @@ public:
 
 	~Renderer();
 
-	void draw();
+	void init();
 
-	//std::vector<>
+	void flush(unsigned int finalframe);
+
+	void draw(SceneObject* obj);
+
+	Materials materials;
+	Framerenderer framerenderer;
 };

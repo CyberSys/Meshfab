@@ -30,6 +30,4 @@ private:
 	int window_height;
 
 	Scene3D scene3d;
-
-	void frameresize(int width, int height);
 };

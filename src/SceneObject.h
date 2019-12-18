@@ -3,18 +3,33 @@
 #include "Transform.h"
 #include <string>
 
+enum ObjectType
+{
+	Empty,
+	Cube
+};
+
+enum MaterialType
+{
+	Default,
+	Diffuse
+};
+
 class SceneObject
 {
 public:
-	SceneObject();
+	SceneObject(ObjectType otype, MaterialType mtype);
 
 	~SceneObject();
 
-	glm::mat4 TransformMatrix(glm::mat4 vp);
+	glm::mat4 TransformMatrix();
 
 	Transform transformation;
 
 	GeomtryInfo buffers;
 	std::string name;
-	std::string materialName;
+	glm::vec4 color;
+
+	ObjectType type_object;
+	MaterialType type_material;
 };
