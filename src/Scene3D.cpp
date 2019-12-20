@@ -18,7 +18,7 @@ void Scene3D::init(int frame_width, int frame_height)
 
 	frame.Create(frame_width, frame_height);
 
-	//addobject(ObjectType::Cube,MaterialType::Default);
+	addobject(ObjectType::Cube,MaterialType::Default);
 
 	//enable flags
 	glEnable(GL_DEPTH_TEST);
