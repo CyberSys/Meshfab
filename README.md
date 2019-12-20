@@ -1,2 +1,2 @@
 # Meshfab
-3d viewer for scenes and models FBX using opengl
+3D Mesh Editor using opengl and C++
