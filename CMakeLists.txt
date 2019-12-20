@@ -20,6 +20,15 @@ set(SOURCE_FILES
 	src/GeoShapes/private/Quad.h
 	src/GeoShapes/private/Quad.cpp
 	src/GeoShapes/private/GeomtryInfo.h
+	src/GeoShapes/private/halfedge/Halfedge.h
+	src/GeoShapes/private/halfedge/Halfedge.cpp
+	src/GeoShapes/private/halfedge/Face.h
+	src/GeoShapes/private/halfedge/Face.cpp
+	src/GeoShapes/private/halfedge/Vertex.h
+	src/GeoShapes/private/halfedge/Vertex.cpp
+	src/GeoShapes/private/halfedge/Mesh.h
+	src/GeoShapes/private/halfedge/Mesh.cpp
+
 	
 	src/Materials/Materials.h
 	src/Materials/Materials.cpp
