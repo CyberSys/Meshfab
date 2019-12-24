@@ -55,6 +55,8 @@ set(SOURCE_FILES
 	src/Transform.cpp
 	src/renderer.h
 	src/renderer.cpp
+	src/Input.h
+	src/Input.cpp
 )
 
 # add library target

@@ -1,15 +1,5 @@
 #include "App.h"
-
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
-{
-	Application::mouse_position(xpos, ypos);
-}
-
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-	Application::mouse_scroll(xoffset,yoffset);
-}
-
+#include "Input.h"
 ////////////////////////////////////////////////////
 Application::Application() :
 	window_width(800),
@@ -27,8 +17,8 @@ Application::Application() :
 		glfwTerminate();
 	}
 	glfwMakeContextCurrent(window);
-	glfwSetCursorPosCallback(window, mouse_callback);
-	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetCursorPosCallback(window, Input::mouse_callback);
+	glfwSetScrollCallback(window, Input::scroll_callback);
 
 	if (glewInit())
 	{
@@ -47,7 +37,7 @@ void Application::run()
 {
 	while (!glfwWindowShouldClose(window))
 	{
-		//check for resizing first..
+		//check for window resizing..
 		resize();
 
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -60,33 +50,18 @@ void Application::run()
 	}
 }
 
-void Application::input()
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-}
-
-void Application::mouse_position(double xpos, double ypos)
-{
-
-}
-
-void Application::mouse_scroll(double xoffset, double yoffset)
-{
-}
-
 void Application::resize()
 {
 	int width, height;
 	glfwGetFramebufferSize(window, &width, &height);
 
 	//if resized ..
-	if(width != window_width || height != window_height)
+	if (width != window_width || height != window_height)
 	{
 		window_width = width;
 		window_height = height;
 
 		glViewport(0, 0, width, height);
-		scene3d.resize(width,height);
+		scene3d.resize(width, height);
 	}
 }

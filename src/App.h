@@ -16,12 +16,6 @@ public:
 
 	void run();
 
-	void input();
-
-	static void mouse_position(double xpos, double ypos);
-
-	static void mouse_scroll(double xoffset, double yoffset);
-
 	void resize();
 
 private:
