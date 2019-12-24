@@ -1,5 +1,7 @@
 #include "Input.h"
 #include "camera.h"
+#include <iostream>
+using namespace std;
 
 Camera* Input::Scene_Camera = nullptr;
 
@@ -26,7 +28,8 @@ void Input::mouse_callback(GLFWwindow * window, double xpos, double ypos)
 		lastX = (float)xpos;
 		lastY = (float)ypos;
 
-		Scene_Camera->ProcessMouseMovement((float)xpos, (float)ypos);
+		cout<< xpos <<" , "<< ypos <<endl;
+		Scene_Camera->ProcessMouseMovement((float)xoffset, (float)yoffset);
 	}
 		
 }
