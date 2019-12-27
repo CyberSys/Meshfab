@@ -17,7 +17,8 @@ Application::Application() :
 		glfwTerminate();
 	}
 	glfwMakeContextCurrent(window);
-	glfwSetCursorPosCallback(window, Input::mouse_callback);
+	glfwSetCursorPosCallback(window, Input::cursor_callback);
+	glfwSetMouseButtonCallback(window, Input::mouse_callback);
 	glfwSetScrollCallback(window, Input::scroll_callback);
 
 	if (glewInit())

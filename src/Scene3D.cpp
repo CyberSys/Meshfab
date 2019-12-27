@@ -22,6 +22,7 @@ void Scene3D::init(int frame_width, int frame_height)
 
 	addobject(ObjectType::Cube,MaterialType::Default);
 
+	camera.initArc(frame_width,frame_height);
 	Input::Scene_Camera = (Camera*)&camera;
 
 	//enable flags

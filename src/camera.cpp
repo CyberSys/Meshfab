@@ -1,36 +1,18 @@
 #include "camera.h"
+#include <iostream>
+using namespace std;
 
-Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) :
+Camera::Camera(glm::vec3 position, glm::vec3 up) :
 	Front(glm::vec3(0.0f, 0.0f, -1.0f)),
-	MovementSpeed(SPEED),
-	MouseSensitivity(SENSITIVITY),
-	Zoom(ZOOM)
+	Zoom(ZOOM),
+	Up(up)
 {
-	Position = position;
-	WorldUp = up;
-	Yaw = yaw;
-	Pitch = pitch;
-	updateCameraVectors();
 }
 
-Camera::Camera(float posX, float posY, float posZ, 
-			  float upX, float upY, float upZ,
-			  float yaw, float pitch): 
-	Front(glm::vec3(0.0f, 0.0f, -1.0f)),
-	MovementSpeed(SPEED),
-	MouseSensitivity(SENSITIVITY),
-	Zoom(ZOOM)
-{
-	Position = glm::vec3(posX, posY, posZ);
-	WorldUp = glm::vec3(upX, upY, upZ);
-	Yaw = yaw;
-	Pitch = pitch;
-	updateCameraVectors();
-}
 
 glm::mat4 Camera::GetViewMatrix()
 {
-	return glm::lookAt(Position, Position + Front, Up);
+	return glm::lookAt(Position, Front, Up);
 }
 
 glm::mat4 Camera::GetProjectionMatrix(float aspectratio)
@@ -38,49 +20,58 @@ glm::mat4 Camera::GetProjectionMatrix(float aspectratio)
 	return glm::perspective(glm::radians(Zoom), aspectratio, 0.1f, 1000.0f);
 }
 
-void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
+void Camera::initArc(int windowwidth, int windowheight)
 {
-	float velocity = MovementSpeed * deltaTime;
-	if (direction == FORWARD)
-		Position += Front * velocity;
-	if (direction == BACKWARD)
-		Position -= Front * velocity;
-	if (direction == LEFT)
-		Position -= Right * velocity;
-	if (direction == RIGHT)
-		Position += Right * velocity;
+	if (windowwidth > windowheight)
+		radius = (float)windowheight * 0.5f;
+	else
+		radius = (float)windowwidth * 0.5f;
+
+	screenWidth = windowwidth;
+	screenHeight = windowheight;
+	halfScreenHeight = windowheight * 0.5f;
+	halfScreenWidth = windowheight * 0.5f;
+
+	cameraDistance = radius * 0.1f;
+	Position = glm::vec3(0, 0, -5);
+
+	this->windowWidth  = windowwidth;
+    this->windowHeight = windowheight;
+	this->rollSpeed = 0.001f;
+	this->angle = 0.0f;
+	this->camAxis = glm::vec3(0.0f, 1.0f, 0.0f);
 }
 
-void Camera::ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch)
+void Camera::Arcball_rotate()
 {
-	xoffset *= MouseSensitivity;
-	yoffset *= MouseSensitivity;
+  if (mouseX != prevX || mouseY != prevY) {
 
-	Yaw += xoffset;
-	Pitch += yoffset;
+    glm::vec3 va = get_arcball_vector((int)prevX, (int)prevY);
+    glm::vec3 vb = get_arcball_vector( (int)mouseX,  (int)mouseY);
+    float angle = acos(glm::min(1.0f, glm::dot(va, vb)));
+    glm::vec3 axis_in_camera_coord = glm::cross(va, vb);
 
-	// Make sure that when pitch is out of bounds, screen doesn't get flipped
-	if (constrainPitch)
-	{
-		if (Pitch > 89.0f)
-			Pitch = 89.0f;
-		if (Pitch < -89.0f)
-			Pitch = -89.0f;
-	}
+	axis_in_camera_coord = glm::vec4(axis_in_camera_coord,1.0f) * GetViewMatrix();
+	glm::mat4 tr= glm::rotate( glm::degrees(angle) * rollSpeed, axis_in_camera_coord );
 
-	// Update Front, Right and Up Vectors using the updated Euler angles
-	updateCameraVectors();
+	tr = glm::inverse(tr);
+	Position = tr * glm::vec4(Position, 1);
+	Up = tr * glm::vec4(Up, 1);
+	Front = tr * glm::vec4(Front, 1);
+  }
 }
 
-void Camera::updateCameraVectors()
+glm::vec3 Camera::get_arcball_vector(int x, int y)
 {
-	// Calculate the new Front vector
-	glm::vec3 front;
-	front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-	front.y = sin(glm::radians(Pitch));
-	front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-	Front = glm::normalize(front);
-	// Also re-calculate the Right and Up vector
-	Right = glm::normalize(glm::cross(Front, WorldUp));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-	Up = glm::normalize(glm::cross(Right, Front));
+	  glm::vec3 P = glm::vec3(1.0*x/screenWidth*2 - 1.0,
+			  1.0*y/screenHeight*2 - 1.0,
+			  0);
+  P.y = -P.y;
+  float OP_squared = P.x * P.x + P.y * P.y;
+  if (OP_squared <= 1*1)
+    P.z = sqrt(1*1 - OP_squared);  // Pythagoras
+  else
+    P = glm::normalize(P);  // nearest point
+  return P;
 }
+
