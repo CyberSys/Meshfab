@@ -37,7 +37,7 @@ void Camera::initArc(int windowwidth, int windowheight)
 
 	this->windowWidth  = windowwidth;
     this->windowHeight = windowheight;
-	this->rollSpeed = 0.001f;
+	this->rollSpeed = 0.01f;
 	this->angle = 0.0f;
 	this->camAxis = glm::vec3(0.0f, 1.0f, 0.0f);
 }
@@ -58,6 +58,9 @@ void Camera::Arcball_rotate()
 	Position = tr * glm::vec4(Position, 1);
 	Up = tr * glm::vec4(Up, 1);
 	Front = tr * glm::vec4(Front, 1);
+
+	prevX = mouseX;
+	prevY = mouseY;
   }
 }
 
