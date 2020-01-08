@@ -50,12 +50,8 @@ public:
 	bool mouseLeftDown = false;
 	float mouseX = 0, mouseY = 0;
 	float prevX, prevY = 0;
-	int screenWidth;
-	int screenHeight;
 	float cameraDistance;
 	float radius;
-	float halfScreenWidth;
-	float halfScreenHeight;
 
 	glm::quat prevquat = glm::identity<glm::quat>();
 	glm::quat quat= glm::identity<glm::quat>();

@@ -15,6 +15,9 @@ void Input::mouse_callback(GLFWwindow * window, int button, int action, int mods
 	double x, y;
 	glfwGetCursorPos(window, &x, &y);
 
+	int width, height;
+	glfwGetWindowSize(window, &width, &height);
+
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 	{
 		Scene_Camera->mouseLeftDown = true;
@@ -23,9 +26,9 @@ void Input::mouse_callback(GLFWwindow * window, int button, int action, int mods
 		Scene_Camera->prevX = (float)x;
 		Scene_Camera->prevY = (float)y;
 
-		cout<<"prev = "<<Scene_Camera->prevX<<endl;
-		cout<<"prev = "<<Scene_Camera->prevY<<endl;
 		Scene_Camera->prevquat = Scene_Camera->quat;
+		Scene_Camera->windowWidth = width;
+		Scene_Camera->windowHeight = height;
 	}
 	else if(button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
 	{
