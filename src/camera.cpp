@@ -32,7 +32,7 @@ void Camera::initArc(int windowwidth, int windowheight)
 
 	this->windowWidth = windowwidth;
 	this->windowHeight = windowheight;
-	this->rollSpeed = 0.01f;
+	this->rollSpeed = 0.02f;
 	this->angle = 0.0f;
 	this->camAxis = glm::vec3(0.0f, 1.0f, 0.0f);
 }

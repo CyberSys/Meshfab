@@ -2,9 +2,7 @@
 #include <glm\gtc\matrix_transform.hpp>
 #include <glew.h>
 
-Mesh::Mesh(){}
-Mesh::Mesh(std::vector<Halfedge *> he, std::vector<Face *> f, std::vector<Vertex *> v) :
-	edges(he), faces(f), vertices(v)
+Mesh::Mesh()
 {
 }
 
@@ -27,62 +25,6 @@ Mesh::~Mesh()
 	}
 }
 
-void Mesh::draw()
-{
-	glBindVertexArray(vao);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 4, GL_FLOAT, false, 0, NULL);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufIdx);
-	glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, 0);
-}
-
-void Mesh::SetHalfEdge(Halfedge *e)
-{
-	edges.push_back(e);
-}
-
-void Mesh::SetFace(Face *f)
-{
-	faces.push_back(f);
-}
-
-void Mesh::SetVertex(Vertex *v)
-{
-	vertices.push_back(v);
-}
-
-Halfedge* Mesh::GetEdgeByNum(unsigned int i)
-{
-	assert(i < edges.size());
-	return edges[i];
-}
-
-Face* Mesh::GetFaceByNum(unsigned int i)
-{
-	assert(i < faces.size());
-	return faces[i];
-}
-
-Vertex* Mesh::GetVertexByNum(unsigned int i)
-{
-	assert(i < vertices.size());
-	return vertices[i];
-}
-
-int Mesh::GetEgdeNum()
-{
-	return edges.size();
-}
-
-int Mesh::GetFaceNum()
-{
-	return faces.size();
-}
-
-int Mesh::GetVertexNum()
-{
-	return vertices.size();
-}
 
 void Mesh::CreatCube()
 {
@@ -349,11 +291,11 @@ void Mesh::create()      // by Xi Yang
 
 	glGenBuffers(1, &bufIdx);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufIdx);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, IDX_COUNT * sizeof(GLuint), obj_idx.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, IDX_COUNT * sizeof(GLuint), obj_idx.data(), GL_DYNAMIC_DRAW);
 
 	glGenBuffers(1, &bufPos);
 	glBindBuffer(GL_ARRAY_BUFFER, bufPos);
-	glBufferData(GL_ARRAY_BUFFER, VERT_COUNT * sizeof(glm::vec4), obj_vert_pos.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, VERT_COUNT * sizeof(glm::vec4), obj_vert_pos.data(), GL_DYNAMIC_DRAW);
 
 	//generateNor();
 	//context->glBindBuffer(GL_ARRAY_BUFFER, bufNor);
@@ -855,5 +797,237 @@ void Mesh::Extrude(Face *f)
 		edges.push_back(tempEdge[i]);
 	}
 
+}
+
+void Mesh::Extrude(Face * f, float offset)
+{
+	f->SetNormal();
+	std::vector<Halfedge*> b4Edge = f->GetEdgeList();
+	std::vector<Halfedge*> tempEdge;
+	std::vector<Vertex*> tempVertex;
+	glm::vec3 dist = f->GetNormal();
+	dist[0] = dist[0] * offset;
+	dist[1] = dist[1] * offset;
+	dist[2] = dist[2] * offset;
+	std::vector<Vertex*> b4Vertex;
+	for (unsigned int i = 0; i < b4Edge.size(); i++)
+	{
+		Vertex *v = new Vertex();
+		glm::vec3 pos = b4Edge[i]->GetVertex()->GetPos() + dist;
+		v->SetPos(pos);
+		tempVertex.push_back(v);
+	}
+	for (unsigned int i = 0; i < b4Edge.size(); i++)
+	{
+		b4Vertex.push_back(b4Edge[i]->GetVertex());
+	}
+	for (unsigned int i = 0; i < tempVertex.size(); i++)
+	{
+		tempVertex[i]->SetVertexID(vertices.size());
+		vertices.push_back(tempVertex[i]);
+	}
+	for (unsigned int i = 0; i < b4Edge.size(); i++)
+	{
+
+		Halfedge* h1 = b4Edge[i];
+		Halfedge* h1p;
+		if (i == 0)
+			h1p = b4Edge[b4Edge.size() - 1];
+		else
+			h1p = b4Edge[i - 1];
+		Halfedge* h2 = h1->GetSym();
+		Vertex *v1 = b4Vertex[i];
+		Vertex *v2;
+		if (i == 0)
+			v2 = b4Vertex[b4Edge.size() - 1];
+		else
+			v2 = b4Vertex[i - 1];
+		Vertex *v3 = tempVertex[i];
+		Vertex *v4;
+		if (i == 0)
+			v4 = tempVertex[b4Edge.size() - 1];
+		else
+			v4 = tempVertex[i - 1];
+		//        std::cout<<" v1  "<<v1->GetVertexID()<<std::endl;
+		//        std::cout<<" v2  "<<v2->GetVertexID()<<std::endl;
+		//        std::cout<<" v3  "<<v3->GetVertexID()<<std::endl;
+		//        std::cout<<" v4  "<<v4->GetVertexID()<<std::endl;
+
+		h1->SetVertex(v3);
+		//if(i==b4Edge.size()-1)
+		//    h1->SetVertex(v3);
+		h1p->SetVertex(v4);
+		v3->SetEdge(h1);
+		v4->SetEdge(h1p);
+
+
+		Halfedge* h1b = new Halfedge();
+		Halfedge* h2b = new Halfedge();
+		h1->SetSym(h1b);
+		h2->SetSym(h2b);
+		h1b->SetSym(h1);
+		h2b->SetSym(h2);
+		h1b->SetVertex(v4);
+		h2b->SetVertex(v1);
+
+		Face* nf = new Face();
+		Halfedge* h3 = new Halfedge();
+		Halfedge* h4 = new Halfedge();
+		h1b->SetFace(nf);
+		h2b->SetFace(nf);
+		h3->SetFace(nf);
+		h4->SetFace(nf);
+		h3->SetVertex(v3);
+		h4->SetVertex(v2);
+		h1b->SetNext(h4);
+		h4->SetNext(h2b);
+		h2b->SetNext(h3);
+		h3->SetNext(h1b);
+		nf->SetStartEdge(h1b);
+		//        std::cout<<" h1b 1 "<<h1b->GetVertex()->GetVertexID()<<std::endl;
+		//        std::cout<<" h4 4 "<<h4->GetVertex()->GetVertexID()<<std::endl;
+		//        std::cout<<" h2b  2 "<<h2b->GetVertex()->GetVertexID()<<std::endl;
+		//        std::cout<<" h3  3 "<<h3->GetVertex()->GetVertexID()<<std::endl;
+		nf->SetColor(glm::vec4((float)rand() / (RAND_MAX), (float)rand() / (RAND_MAX), (float)rand() / (RAND_MAX), 1));
+		//nf->SetNormal();
+
+
+
+		faces.push_back(nf);
+		nf->SetFaceID(faces.size() - 1);
+		//        h1b->SetHalfedgeID(edges.size());
+		//        edges.push_back(h1b);
+		//        h2b->SetHalfedgeID(edges.size());
+		//        edges.push_back(h2b);
+		tempEdge.push_back(h1b);
+		tempEdge.push_back(h2b);
+		tempEdge.push_back(h3);
+		tempEdge.push_back(h4);
+
+
+	}
+	for (unsigned int i = 0; i < tempEdge.size(); i++)
+	{
+
+		if (tempEdge[i]->GetSym() == nullptr)
+		{
+
+			Halfedge* pre = tempEdge[i]->GetPrevious();
+			unsigned int v2 = pre->GetVertex()->GetVertexID();
+
+			unsigned int v1 = tempEdge[i]->GetVertex()->GetVertexID();
+
+			for (unsigned int k = 0; k < tempEdge.size(); k++)
+			{
+				unsigned int s1 = tempEdge[k]->GetVertex()->GetVertexID();
+
+				unsigned int s2 = tempEdge[k]->GetNext()->GetVertex()->GetVertexID();
+				if ((s1 == v1) && (s2 == v2))
+				{
+					tempEdge[i]->SetSym(tempEdge[k]->GetNext());
+					tempEdge[k]->GetNext()->SetSym(tempEdge[i]);
+				}
+			}
+
+		}
+	}
+	for (unsigned int i = 0; i < tempEdge.size(); i++)
+	{
+		tempEdge[i]->SetHalfEdgeID(edges.size());
+		edges.push_back(tempEdge[i]);
+	}
+}
+
+////////////////////////////////////// collapse
+
+//void Mesh::Collapse(Halfedge *h)
+//{
+//	Halfedge* he_next = h->GetNext();
+//	Vertex* v_he = h->GetVertex();
+//
+//	int current_edge = h->GetHalfEdgeID();
+//	int current_vert = h->GetVertex()->GetVertexID();
+//	int next_vert = he_next->GetVertex()->GetVertexID();
+//
+//	for (auto e : edges)
+//	{
+//		if (e->GetVertex() == vertices[next_vert])
+//			e->SetVertex(vertices[current_vert]);
+//	}
+//
+//	vertices.erase(vertices.begin() + next_vert);
+//	edges.erase(edges.begin() + current_edge);
+//
+//	//check for faces 
+//	
+//}
+
+void Mesh::Collapse(Halfedge *h)
+{
+	//set half edges pointing on origin vertx 
+	//point on new vertx
+	Vertex* vert1 = h->GetVertex();
+	Vertex* vert2 = h->GetNext()->GetVertex();
+
+	Vertex* new_vert = vert2;
+	glm::vec3 newpos = (vert1->GetPos() + vert2->GetPos()) / 2.0f;
+	new_vert->SetPos(newpos);
+
+	//each edge out from this vertx
+	for (auto e : edges)
+	{
+		if (e->GetVertex() == vert1)
+			e->SetVertex(new_vert);
+	}
+
+	//each edge point to this edge
+	for (auto e : edges)
+	{
+		if (e->GetNext()->GetVertex() == vert1)
+			e->GetNext()->SetVertex(new_vert);
+	}
+
+
+	int vert1_indx = vert1->GetVertexID();
+	vertices.erase(vertices.begin() + vert1_indx);
+	
+	int he_indx = h->GetHalfEdgeID();
+	edges.erase(edges.begin() + he_indx);
+
+	int sym_indx = h->GetSym()->GetHalfEdgeID();
+	edges.erase(edges.begin() + sym_indx);
+
+
+	//update all edges id's
+	for (size_t i =0 ; i < edges.size(); ++i)
+	{
+		edges[i]->SetHalfEdgeID(i);
+	}
+
+	//update all verts id's
+	for (size_t i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i]->SetVertexID(i);
+	}
+}
+
+void Mesh::Collapse(Face* f)
+{
+	auto e_list = f->GetEdgeList();
+
+	for (size_t i = 0; i < e_list.size(); ++i)
+	{
+		Collapse(e_list[i]);
+	}
+
+	//delete this face..
+	int face_indx = f->GetFaceID();
+	faces.erase(faces.begin() + face_indx);
+	
+	//update all faces id's
+	for (size_t i = 0; i < vertices.size(); ++i)
+	{
+		faces[i]->SetFaceID(i);
+	}
 }
 

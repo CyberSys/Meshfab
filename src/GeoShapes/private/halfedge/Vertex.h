@@ -1,6 +1,7 @@
 #pragma once
 #include <glm.hpp>
 #include "Halfedge.h"
+#include <vector>
 
 class Vertex
 {
