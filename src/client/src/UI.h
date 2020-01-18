@@ -14,9 +14,10 @@ public:
 	void init(GLFWwindow* window);
 
 	void Begin_UIFrame();
+
+	void Draw_PrimativesWindow();
+
 	void Draw_StaticsWindow();
+
 	void End_UIFrame();
-
-private:
-
 };

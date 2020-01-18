@@ -1,4 +1,5 @@
 #include "UI.h"
+#include <iostream>
 
 UI::UI()
 {
@@ -28,6 +29,33 @@ void UI::Begin_UIFrame()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
+}
+
+void UI::Draw_PrimativesWindow()
+{
+	ImGui::Begin("Primatives");
+	
+	if(ImGui::ImageButton(NULL,ImVec2(50,50)))
+	{
+		
+	}
+	ImGui::SameLine();
+	if(ImGui::ImageButton(NULL,ImVec2(50,50)))
+	{
+		
+	}
+
+	if(ImGui::ImageButton(NULL,ImVec2(50,50)))
+	{
+		
+	}
+	ImGui::SameLine();
+	if(ImGui::ImageButton(NULL,ImVec2(50,50)))
+	{
+		
+	}
+
+	ImGui::End();
 }
 
 void UI::Draw_StaticsWindow()
