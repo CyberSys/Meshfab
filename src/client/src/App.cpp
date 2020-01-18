@@ -25,6 +25,9 @@ Application::Application() :
 	{
 		std::cout << "Failed to initialize GLEW" << std::endl;
 	}
+
+	//init imgui module..
+	APPUI.init(window);
 }
 
 Application::~Application()
@@ -42,7 +45,13 @@ void Application::run()
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//render goes here..
+		//rendering ui ..
+		APPUI.Begin_UIFrame();
+		APPUI.Draw_StaticsWindow();
+		APPUI.End_UIFrame();
+
+		//renderer goes here..
+
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -61,6 +70,7 @@ void Application::resize()
 		window_height = height;
 
 		glViewport(0, 0, width, height);
-		//resize goes here..
+
+		//resize renderer frame goes here..
 	}
 }

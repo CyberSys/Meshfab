@@ -1,7 +1,6 @@
 #pragma once
 #include <glfw3.h>
 
-class Camera;
 class Input
 {
 public:

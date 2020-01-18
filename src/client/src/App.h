@@ -3,6 +3,8 @@
 #include <glfw3.h>
 #include <iostream>
 
+#include "UI.h"
+
 using namespace std;
 
 class Application
@@ -17,6 +19,7 @@ public:
 	void resize();
 
 private:
+	UI APPUI;
 	GLFWwindow* window;
 	int window_width;
 	int window_height;

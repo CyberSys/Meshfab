@@ -15,6 +15,19 @@ set(SOURCE_FILES
 	src/App.cpp
 	src/Input.h
 	src/Input.cpp
+	
+	src/UI.h
+	src/UI.cpp
+	src/imgui/imconfig.h
+	src/imgui/imgui.h
+	src/imgui/imgui.cpp
+	src/imgui/imgui_draw.cpp
+	src/imgui/imgui_impl_glfw.h
+	src/imgui/imgui_impl_glfw.cpp
+	src/imgui/imgui_impl_opengl3.h
+	src/imgui/imgui_impl_opengl3.cpp
+	src/imgui/imgui_internal.h
+	src/imgui/imgui_widgets.cpp
 )
 
 # add library target
@@ -87,7 +100,6 @@ target_include_directories(client-Viewer
 	${CMAKE_CURRENT_SOURCE_DIR}/external/glfw/include
 	${CMAKE_CURRENT_SOURCE_DIR}/external/glm
 	${CMAKE_CURRENT_SOURCE_DIR}/external/stb_image
-	${CMAKE_CURRENT_SOURCE_DIR}/external/imgui
 	${CMAKE_CURRENT_SOURCE_DIR}/resources	
 	
 	#system modules includes
