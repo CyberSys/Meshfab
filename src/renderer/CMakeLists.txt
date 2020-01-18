@@ -49,6 +49,9 @@ target_link_libraries(Renderer
 	PUBLIC
 		opengl32
 		glew32
+		
+		#system modules.
+		Geometry
 )
 
 
@@ -102,6 +105,9 @@ target_include_directories(Renderer
 	${CMAKE_CURRENT_SOURCE_DIR}/external/glm
 	${CMAKE_CURRENT_SOURCE_DIR}/external/stb_image
 	${CMAKE_CURRENT_SOURCE_DIR}/resources
+	
+	#system modules includes
+	${Geometry_INCLUDE_DIRS}/
 )
 
 # list Libs directories

@@ -1,5 +1,5 @@
 #pragma once
-#include "GeoShapes/private/GeomtryInfo.h"
+#include "private/GeomtryInfo.h"
 #include "Transform.h"
 #include <string>
 

@@ -1,8 +1,6 @@
 #include "Scene3D.h"
 #include <glew.h>
 
-#include "Input.h"
-
 Scene3D::Scene3D() : 
 	view(glm::mat4(1)),
 	projection(glm::mat4(1))
@@ -23,7 +21,6 @@ void Scene3D::init(int frame_width, int frame_height)
 	addobject(ObjectType::Cube,MaterialType::Default);
 
 	camera.initArc(frame_width,frame_height);
-	Input::Scene_Camera = (Camera*)&camera;
 
 	//enable flags
 	glEnable(GL_DEPTH_TEST);

@@ -1,5 +1,5 @@
 #include "Framerenderer.h"
-#include "GeoShapes/Shape2D.h"
+#include "Shape2D.h"
 
 #include <glew.h>
 

@@ -1,5 +1,5 @@
 #include "SceneObject.h"
-#include "GeoShapes/Shape3D.h"
+#include "Shape3D.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
