@@ -31,6 +31,27 @@ void UI::Begin_UIFrame()
 	ImGui::NewFrame();
 }
 
+void UI::Draw_SelectionModesWindow()
+{
+	ImGui::Begin("Selection");
+	
+	if(ImGui::ImageButton(NULL,ImVec2(25,25)))
+	{
+		
+	}
+	ImGui::SameLine();
+	if(ImGui::ImageButton(NULL,ImVec2(25,25)))
+	{
+		
+	}
+	ImGui::SameLine();
+	if(ImGui::ImageButton(NULL,ImVec2(25,25)))
+	{
+		
+	}
+	ImGui::End();
+}
+
 void UI::Draw_PrimativesWindow()
 {
 	ImGui::Begin("Primatives");

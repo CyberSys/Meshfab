@@ -15,6 +15,8 @@ public:
 
 	void Begin_UIFrame();
 
+	void Draw_SelectionModesWindow();
+
 	void Draw_PrimativesWindow();
 
 	void Draw_StaticsWindow();
