@@ -28,6 +28,9 @@ target_link_libraries(ModelLoad
 		opengl32
 		glew32
 		assimp-vc141-mt
+
+		#system modules.
+		Texturing
 )
 
 if(WIN32)
@@ -55,6 +58,9 @@ target_include_directories(ModelLoad
 	PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/external/glew/include
 	${CMAKE_CURRENT_SOURCE_DIR}/external/glm
+
+	#system modules includes
+	${Texturing_INCLUDE_DIRS}/
 )
 
 if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")

@@ -3,10 +3,35 @@
 // GL-include
 #include <glew.h>
 
-//assimp library includes
+// assimp library includes
 #include <assimp/cimport.h>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+
+// tetxure loader include
+#include <Texture.h>
+
+
+/////////////////////// textures & materials
+void get_mesh_texture(aiScene* scene, const aiMesh* mesh, vector<unsigned int>& textures)
+{
+	// extract all properties from the ASSIMP material structure
+	const aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+	aiString Path;
+
+	if (mesh->mTextureCoords[0])
+	{
+		// diffuse texture
+		if(aiGetMaterialString(material,AI_MATKEY_TEXTURE_DIFFUSE(0),&Path) == AI_SUCCESS)
+		{
+			auto id = Texture::Create2D(Path.C_Str());
+			textures.push_back(id);
+		}
+	}
+
+}
+
+//////////////////////////////////////////////////////
 
 void aimat4_to_glmat4(aiMatrix4x4& prevmat, glm::mat4& newmat)
 {
@@ -97,11 +122,14 @@ vector<Part> Model::Load(const char * filename)
 
 	vector<Part> modelparts;
 	
-	//loop on all meshes..
+	// loop on all meshes..
 	for (size_t i = 0; i < scene->mNumMeshes;++i)
 	{
 		Part modelpart;
 		const aiMesh* mesh = scene->mMeshes[i];
+
+		// Load Textures for each mesh..
+		get_mesh_texture(scene, mesh, modelpart.textures);
 
 		// fill the buffers
 		for (size_t x = 0; x < mesh->mNumVertices; ++x)
@@ -209,5 +237,6 @@ vector<Part> Model::Load(const char * filename)
 		}
 	}
 
+	printf("Model Loading Finished .. \n");
 	return modelparts;
 }

@@ -28,7 +28,7 @@ void Camera::initArc(int windowwidth, int windowheight)
 		radius = (float)windowwidth * 0.5f;
 
 	cameraDistance = radius * 0.1f;
-	Position = glm::vec3(0, 0, -100);
+	Position = glm::vec3(0, 0, -50);
 
 	this->windowWidth = windowwidth;
 	this->windowHeight = windowheight;
