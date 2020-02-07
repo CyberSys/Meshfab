@@ -1,5 +1,7 @@
 #pragma once
 #include <glm.hpp>
+#include <vector>
+using namespace std;
 /*
 * this struct for generated buffer on gpu
 * after generation will need to hold all buffers id
@@ -19,4 +21,6 @@ struct GeomtryInfo
 	unsigned int nbo;
 	unsigned int cbo;
 	unsigned int ibo;
+
+	vector<unsigned int> textures_ids;
 };

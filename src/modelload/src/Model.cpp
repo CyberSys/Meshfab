@@ -13,7 +13,7 @@
 
 
 /////////////////////// textures & materials
-void get_mesh_texture(aiScene* scene, const aiMesh* mesh, vector<unsigned int>& textures)
+void get_mesh_texture(aiScene* scene, const aiMesh* mesh, const char* directory, vector<unsigned int>& textures)
 {
 	// extract all properties from the ASSIMP material structure
 	const aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
@@ -24,7 +24,10 @@ void get_mesh_texture(aiScene* scene, const aiMesh* mesh, vector<unsigned int>& 
 		// diffuse texture
 		if(aiGetMaterialString(material,AI_MATKEY_TEXTURE_DIFFUSE(0),&Path) == AI_SUCCESS)
 		{
-			auto id = Texture::Create2D(Path.C_Str());
+			string fullpath(directory);
+			fullpath += '\\';
+			fullpath += Path.C_Str();
+			auto id = Texture::Create2D(fullpath.c_str());
 			textures.push_back(id);
 		}
 	}
@@ -73,7 +76,9 @@ void get_meshNode(aiNode* current,aiScene* scene,vector<node_transform>& mats)
 //recurse on all mesh parts..
 vector<Part> Model::Load(const char * filename)
 {
-	// read file via ASSIMP
+	// get dir folder
+	string _path = string(filename);
+	string dir_path = _path.substr(0, _path.find_last_of('\\'));
 
 	// get current time
 	clock_t begin = clock();
@@ -83,19 +88,20 @@ vector<Part> Model::Load(const char * filename)
 	aiSetImportPropertyInteger(props, AI_CONFIG_GLOB_MEASURE_TIME, 1);
 
 	unsigned int ppsteps = aiProcess_CalcTangentSpace | // calculate tangents and bitangents if possible
-        aiProcess_JoinIdenticalVertices    | // join identical vertices/ optimize indexing
-        aiProcess_ValidateDataStructure    | // perform a full validation of the loader's output
-        aiProcess_ImproveCacheLocality     | // improve the cache locality of the output vertices
-        aiProcess_RemoveRedundantMaterials | // remove redundant materials
-        aiProcess_FindDegenerates          | // remove degenerated polygons from the import
-        aiProcess_FindInvalidData          | // detect invalid model data, such as invalid normal vectors
-        aiProcess_GenUVCoords              | // convert spherical, cylindrical, box and planar mapping to proper UVs
-        aiProcess_TransformUVCoords        | // preprocess UV transformations (scaling, translation ...)
-        aiProcess_FindInstances            | // search for instanced meshes and remove them by references to one master
-        aiProcess_LimitBoneWeights         | // limit bone weights to 4 per vertex
-        aiProcess_OptimizeMeshes		   | // join small meshes, if possible;
-        aiProcess_SplitByBoneCount         | // split meshes with too many bones. Necessary for our (limited) hardware skinning shader
-        0;
+		aiProcess_JoinIdenticalVertices | // join identical vertices/ optimize indexing
+		aiProcess_ValidateDataStructure | // perform a full validation of the loader's output
+		aiProcess_ImproveCacheLocality | // improve the cache locality of the output vertices
+		aiProcess_RemoveRedundantMaterials | // remove redundant materials
+		aiProcess_FindDegenerates | // remove degenerated polygons from the import
+		aiProcess_FindInvalidData | // detect invalid model data, such as invalid normal vectors
+		aiProcess_GenUVCoords | // convert spherical, cylindrical, box and planar mapping to proper UVs
+		aiProcess_TransformUVCoords | // preprocess UV transformations (scaling, translation ...)
+		aiProcess_FindInstances | // search for instanced meshes and remove them by references to one master
+		aiProcess_LimitBoneWeights | // limit bone weights to 4 per vertex
+		aiProcess_OptimizeMeshes | // join small meshes, if possible;
+		aiProcess_SplitByBoneCount | // split meshes with too many bones. Necessary for our (limited) hardware skinning shader
+		aiProcess_GenBoundingBoxes | // generate bounding box values
+		0;
 
 		aiScene* scene = (aiScene*)aiImportFileExWithProperties(filename,
 		ppsteps | /* configurable pp steps */
@@ -129,7 +135,7 @@ vector<Part> Model::Load(const char * filename)
 		const aiMesh* mesh = scene->mMeshes[i];
 
 		// Load Textures for each mesh..
-		get_mesh_texture(scene, mesh, modelpart.textures);
+		get_mesh_texture(scene, mesh, dir_path.c_str(), modelpart.textures);
 
 		// fill the buffers
 		for (size_t x = 0; x < mesh->mNumVertices; ++x)

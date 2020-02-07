@@ -16,6 +16,8 @@ set(SOURCE_FILES
 	src/Materials/Private/DefaultMaterial.cpp
 	src/Materials/Private/PhongMaterial.h
 	src/Materials/Private/PhongMaterial.cpp
+	src/Materials/Private/DiffuseMaterial.h
+	src/Materials/Private/DiffuseMaterial.cpp
 	src/Materials/Private/CheckboardMaterial.h
 	src/Materials/Private/CheckboardMaterial.cpp
 	src/Materials/Private/ColoredMaterial.h

@@ -57,6 +57,9 @@ vector<GeomtryInfo> Model3D::Generate(const char * filepath)
 		gpubuffers.bmax = part.bounding_max;
 		gpubuffers.bmin = part.bounding_min;
 
+		//textures
+		gpubuffers.textures_ids = part.textures;
+
 		result.push_back(gpubuffers);
 	}
 

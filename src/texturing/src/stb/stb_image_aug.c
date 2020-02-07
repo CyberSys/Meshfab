@@ -86,6 +86,7 @@
   #endif
 #endif
 
+
 // implementation:
 typedef unsigned char uint8;
 typedef unsigned short uint16;
@@ -101,9 +102,9 @@ typedef unsigned char validate_uint32[sizeof(uint32)==4];
 #define STBI_NO_WRITE
 #endif
 
-//#ifndef STBI_NO_DDS
-//#include "stbi_DDS_aug.h"
-//#endif
+#ifndef STBI_NO_DDS
+#include "stbi_DDS_aug.h"
+#endif
 
 //	I (JLD) want full messages for SOIL
 #define STBI_FAILURE_USERMSG 1
@@ -173,8 +174,7 @@ static stbi_uc *hdr_to_ldr(float   *data, int x, int y, int comp);
 #ifndef STBI_NO_STDIO
 unsigned char *stbi_load(char const *filename, int *x, int *y, int *comp, int req_comp)
 {
-	FILE *f;
-	fopen_s(&f,filename, "rb");
+   FILE *f = fopen(filename, "rb");
    unsigned char *result;
    if (!f) return epuc("can't fopen", "Unable to open file");
    result = stbi_load_from_file(f,x,y,comp,req_comp);
@@ -193,6 +193,10 @@ unsigned char *stbi_load_from_file(FILE *f, int *x, int *y, int *comp, int req_c
       return stbi_bmp_load_from_file(f,x,y,comp,req_comp);
    if (stbi_psd_test_file(f))
       return stbi_psd_load_from_file(f,x,y,comp,req_comp);
+   #ifndef STBI_NO_DDS
+   if (stbi_dds_test_file(f))
+      return stbi_dds_load_from_file(f,x,y,comp,req_comp);
+   #endif
    #ifndef STBI_NO_HDR
    if (stbi_hdr_test_file(f)) {
       float *hdr = stbi_hdr_load_from_file(f, x,y,comp,req_comp);
@@ -220,6 +224,10 @@ unsigned char *stbi_load_from_memory(stbi_uc const *buffer, int len, int *x, int
       return stbi_bmp_load_from_memory(buffer,len,x,y,comp,req_comp);
    if (stbi_psd_test_memory(buffer,len))
       return stbi_psd_load_from_memory(buffer,len,x,y,comp,req_comp);
+   #ifndef STBI_NO_DDS
+   if (stbi_dds_test_memory(buffer,len))
+      return stbi_dds_load_from_memory(buffer,len,x,y,comp,req_comp);
+   #endif
    #ifndef STBI_NO_HDR
    if (stbi_hdr_test_memory(buffer, len)) {
       float *hdr = stbi_hdr_load_from_memory(buffer, len,x,y,comp,req_comp);
@@ -240,8 +248,7 @@ unsigned char *stbi_load_from_memory(stbi_uc const *buffer, int len, int *x, int
 #ifndef STBI_NO_STDIO
 float *stbi_loadf(char const *filename, int *x, int *y, int *comp, int req_comp)
 {
-   FILE *f ;
-   fopen_s(&f,filename, "rb");
+   FILE *f = fopen(filename, "rb");
    float *result;
    if (!f) return epf("can't fopen", "Unable to open file");
    result = stbi_loadf_from_file(f,x,y,comp,req_comp);
@@ -293,8 +300,7 @@ int stbi_is_hdr_from_memory(stbi_uc const *buffer, int len)
 #ifndef STBI_NO_STDIO
 extern int      stbi_is_hdr          (char const *filename)
 {
-   FILE *f ;
-   fopen_s(&f,filename, "rb");
+   FILE *f = fopen(filename, "rb");
    int result=0;
    if (f) {
       result = stbi_is_hdr_from_file(f);
@@ -1548,8 +1554,7 @@ unsigned char *stbi_jpeg_load_from_file(FILE *f, int *x, int *y, int *comp, int 
 unsigned char *stbi_jpeg_load(char const *filename, int *x, int *y, int *comp, int req_comp)
 {
    unsigned char *data;
-   FILE *f ;
-   fopen_s(&f,filename, "rb");
+   FILE *f = fopen(filename, "rb");
    if (!f) return NULL;
    data = stbi_jpeg_load_from_file(f,x,y,comp,req_comp);
    fclose(f);
@@ -2386,8 +2391,7 @@ unsigned char *stbi_png_load_from_file(FILE *f, int *x, int *y, int *comp, int r
 unsigned char *stbi_png_load(char const *filename, int *x, int *y, int *comp, int req_comp)
 {
    unsigned char *data;
-   FILE *f ;
-   fopen_s(&f,filename, "rb");
+   FILE *f = fopen(filename, "rb");
    if (!f) return NULL;
    data = stbi_png_load_from_file(f,x,y,comp,req_comp);
    fclose(f);
@@ -2702,8 +2706,7 @@ static stbi_uc *bmp_load(stbi *s, int *x, int *y, int *comp, int req_comp)
 stbi_uc *stbi_bmp_load             (char const *filename,           int *x, int *y, int *comp, int req_comp)
 {
    stbi_uc *data;
-   FILE *f ;
-   fopen_s(&f,filename, "rb");
+   FILE *f = fopen(filename, "rb");
    if (!f) return NULL;
    data = stbi_bmp_load_from_file(f, x,y,comp,req_comp);
    fclose(f);
@@ -2989,8 +2992,7 @@ static stbi_uc *tga_load(stbi *s, int *x, int *y, int *comp, int req_comp)
 stbi_uc *stbi_tga_load             (char const *filename,           int *x, int *y, int *comp, int req_comp)
 {
    stbi_uc *data;
-   FILE *f ;
-   fopen_s(&f,filename, "rb");
+   FILE *f = fopen(filename, "rb");
    if (!f) return NULL;
    data = stbi_tga_load_from_file(f, x,y,comp,req_comp);
    fclose(f);
@@ -3204,8 +3206,7 @@ static stbi_uc *psd_load(stbi *s, int *x, int *y, int *comp, int req_comp)
 stbi_uc *stbi_psd_load(char const *filename, int *x, int *y, int *comp, int req_comp)
 {
    stbi_uc *data;
-   FILE *f ;
-   fopen_s(&f,filename, "rb");
+   FILE *f = fopen(filename, "rb");
    if (!f) return NULL;
    data = stbi_psd_load_from_file(f, x,y,comp,req_comp);
    fclose(f);
@@ -3544,8 +3545,7 @@ stbi_uc *stbi_hdr_load_rgbe_file(FILE *f, int *x, int *y, int *comp, int req_com
 
 stbi_uc *stbi_hdr_load_rgbe        (char const *filename,           int *x, int *y, int *comp, int req_comp)
 {
-   FILE *f;
-   fopen_s(&f,filename, "rb");
+   FILE *f = fopen(filename, "rb");
    unsigned char *result;
    if (!f) return epuc("can't fopen", "Unable to open file");
    result = stbi_hdr_load_rgbe_file(f,x,y,comp,req_comp);
@@ -3641,9 +3641,7 @@ static void write_pixels(FILE *f, int rgb_dir, int vdir, int x, int y, int comp,
 
 static int outfile(char const *filename, int rgb_dir, int vdir, int x, int y, int comp, void *data, int alpha, int pad, char *fmt, ...)
 {
-	FILE *f;
-	fopen_s(&f,filename, "wb");
-
+   FILE *f = fopen(filename, "wb");
    if (f) {
       va_list v;
       va_start(v, fmt);
@@ -3679,6 +3677,6 @@ int stbi_write_tga(char const *filename, int x, int y, int comp, void *data)
 #endif // STBI_NO_WRITE
 
 //	add in my DDS loading support
-//#ifndef STBI_NO_DDS
-//#include "stbi_DDS_aug_c.h"
-//#endif
+#ifndef STBI_NO_DDS
+#include "stbi_DDS_aug_c.h"
+#endif

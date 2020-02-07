@@ -25,6 +25,12 @@ public:
 
 	void phong_material(glm::mat4 mvp, glm::mat4 model_mat, glm::vec3 light_dir, glm::vec3 light_color);
 
+	void diffuse_material(glm::mat4 mvp,
+						glm::mat4 model_mat,
+						glm::vec3 light_dir,
+						glm::vec3 light_color,
+						unsigned int diffusetexture);
+
 	void framerender_material(unsigned int frametexture);
 
 	std::map<std::string, unsigned int> programs;

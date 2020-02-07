@@ -124,6 +124,11 @@ inline static void selectmaterial(SceneObject* obj, Materials& materials)
 		materials.checkboard_material(obj->TransformMatrix());
 		break;
 	case MaterialType::Diffuse:
+		materials.diffuse_material(obj->TransformMatrix(),
+								obj->ModelMatrix(),
+								Renderer::camera.Front,
+								glm::vec3(0.8,0.8,0.8),
+								obj->buffers.textures_ids[0]);
 		break;
 	default:
 		break;
@@ -162,7 +167,7 @@ void Renderer::Draw_sceneobjs(DrawMode mode)
 	for (auto obj : Scene::scene_objs)
 	{
 		//draw bounding box
-		//Draw_boundingbox(Scene::viewer_bbox, obj->buffers.bmax, obj->buffers.bmin);
+		Draw_boundingbox(Scene::viewer_bbox, obj->buffers.bmax, obj->buffers.bmin);
 
 		//calculate vp camera matrix..
 		obj->transformation.vp_matrix =
@@ -170,7 +175,7 @@ void Renderer::Draw_sceneobjs(DrawMode mode)
 
 		//render 
 		{
-			obj->type_material = MaterialType::Phong;
+			obj->type_material = MaterialType::Diffuse;
 			selectmaterial(obj, materials);
 
 			glBindVertexArray(obj->buffers.vao);

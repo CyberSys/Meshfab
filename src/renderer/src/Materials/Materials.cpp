@@ -3,6 +3,7 @@
 #include "Private/DefaultMaterial.h"
 #include "Private/ColoredMaterial.h"
 #include "Private/PhongMaterial.h"
+#include "Private/DiffuseMaterial.h"
 #include "Private/CheckboardMaterial.h"
 #include "Private/FramerenderMaterial.h"
 
@@ -52,6 +53,11 @@ void Materials::init()
 	}
 
 	//add diffuse shader
+	{
+		DiffuseMaterial material;
+		int id = material.Create();
+		programs.insert(std::pair<std::string, unsigned int>("Diffuse", id));
+	}
 	
 	//and so on..
 }
@@ -94,6 +100,22 @@ void Materials::phong_material(glm::mat4 mvp, glm::mat4 model_mat, glm::vec3 lig
 	program.setMat4("model", model_mat);
 	program.setVec3("light_dir", light_dir);
 	program.setVec3("light_color", light_color);
+}
+
+void Materials::diffuse_material(glm::mat4 mvp, glm::mat4 model_mat, glm::vec3 light_dir, glm::vec3 light_color, unsigned int diffusetexture)
+{
+	//use diffuse shader and send data to gpu
+	ShaderProgram program;
+	program.ID = programs["Diffuse"];
+	program.use();
+	program.setMat4("mvp", mvp);
+	program.setMat4("model", model_mat);
+	program.setVec3("light_dir", light_dir);
+	program.setVec3("light_color", light_color);
+	program.setVec3("light_color", light_color);
+
+	// bind Texture
+	glBindTexture(GL_TEXTURE_2D, diffusetexture);
 }
 
 void Materials::framerender_material(unsigned int frametexture)
