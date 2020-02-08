@@ -209,6 +209,10 @@ vector<Part> Model::Load(const char * filename)
 
 			// bones & weights
 			// TODO
+
+			//bounding box
+			modelpart.bounding_max = glm::vec3(mesh->mAABB.mMax.x,mesh->mAABB.mMax.y,mesh->mAABB.mMax.z);
+			modelpart.bounding_min = glm::vec3(mesh->mAABB.mMin.x,mesh->mAABB.mMin.y,mesh->mAABB.mMin.z);
 		}
 
 		// fill index buffer

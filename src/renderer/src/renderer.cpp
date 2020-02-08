@@ -170,7 +170,7 @@ void Renderer::Draw_sceneobjs(DrawMode mode)
 	for (auto obj : Scene::scene_objs)
 	{
 		//draw bounding box
-		//Draw_boundingbox(Scene::viewer_bbox, obj->buffers.bmax, obj->buffers.bmin);
+		Draw_boundingbox(Scene::viewer_bbox, obj->buffers.bmax, obj->buffers.bmin);
 
 		//calculate vp camera matrix..
 		obj->transformation.vp_matrix =
@@ -178,7 +178,7 @@ void Renderer::Draw_sceneobjs(DrawMode mode)
 
 		//render 
 		{
-			obj->type_material = MaterialType::Diffuse;
+			obj->type_material = MaterialType::Phong;
 			selectmaterial(obj, materials);
 
 			glBindVertexArray(obj->buffers.vao);
