@@ -38,12 +38,17 @@ vector<GeomtryInfo> Model3D::Generate(const char * filepath)
 		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, NULL);
 		gpubuffers.num_vertices = part.vertices.size() / 3;
 
-		//vertex buffer
+		//normal buffer
 		gpubuffers.nbo = create_gpuBuffer(part.normals);
 		glEnableVertexAttribArray(1); //nomrals always 3-comp(x,y,z).
 		glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, NULL);
 
-		//remaining pdarts of infos like colors, uvs
+		//uvs buffer
+		gpubuffers.uvbo = create_gpuBuffer(part.uvs);
+		glEnableVertexAttribArray(2); //uvs always 2-comp(x,y).
+		glVertexAttribPointer(2, 2, GL_FLOAT, false, 0, NULL);
+
+		//remaining pdarts of infos like colors
 
 		//index buffer
 		glGenBuffers(1, &gpubuffers.ibo);

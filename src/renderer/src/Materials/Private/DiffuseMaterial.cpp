@@ -57,7 +57,9 @@ unsigned int DiffuseMaterial::Create()
 				uniform sampler2D diffuse_texture;
 				void main()
 				{
+					if(texture(diffuse_texture, TexCoord).a == 0.0) discard;
 					outColor = vec4(v_color, 1.0f) * texture(diffuse_texture, TexCoord);
+					
 				})CODE";
 
 	ShaderProgram program(vs,ps);

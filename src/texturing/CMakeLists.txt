@@ -10,11 +10,6 @@ set(HEADER_FILES
 set(SOURCE_FILES
 	src/Texture.h
 	src/Texture.cpp
-	
-	src/stb/stb_image.h
-	src/stb/stb_image.cpp
-	src/stb/stb_image_aug.h
-	src/stb/stb_image_aug.c
 )
 
 # add library target

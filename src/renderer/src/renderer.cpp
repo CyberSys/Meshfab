@@ -159,15 +159,18 @@ void Renderer::Draw_sceneobjs(DrawMode mode)
 {
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 
 	GradientBackground(0.7f, 0.7f, 0.7f, 1.0f,
 					   0.2f, 0.2f, 0.2f, 1.0f);
+
+	glEnable(GL_BLEND);
 
 	//render all you want here
 	for (auto obj : Scene::scene_objs)
 	{
 		//draw bounding box
-		Draw_boundingbox(Scene::viewer_bbox, obj->buffers.bmax, obj->buffers.bmin);
+		//Draw_boundingbox(Scene::viewer_bbox, obj->buffers.bmax, obj->buffers.bmin);
 
 		//calculate vp camera matrix..
 		obj->transformation.vp_matrix =
@@ -188,6 +191,8 @@ void Renderer::Draw_sceneobjs(DrawMode mode)
 
 void Renderer::Draw_object(SceneObject* obj, DrawMode mode)
 {
+	if(obj == NULL) return;
+
 	//calculate vp camera matrix..
 	obj->transformation.vp_matrix =
 		camera.GetProjectionMatrix(frame.AspectRatio()) * camera.GetViewMatrix();

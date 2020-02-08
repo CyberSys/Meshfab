@@ -8,44 +8,39 @@ int width, height, nrChannels;
 
 unsigned int Texture::Create2D(const char* filename)
 {
-	// load image, create texture and generate mipmaps
-	//stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-	void* data = stbi_load(filename, &width, &height, &nrChannels, 0);
+	unsigned int textureID;
+	glGenTextures(1, &textureID);
 
-	unsigned int GLtexture = 0;
-	glGenTextures(1, &GLtexture);
-	glBindTexture(GL_TEXTURE_2D, GLtexture);
-
-	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	if (nrChannels == 1)
+	int width, height, nrComponents;
+	unsigned char *data = stbi_load(filename, &width, &height, &nrComponents, 0);
+	if (data)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);
+		GLenum format;
+		if (nrComponents == 1)
+			format = GL_RED;
+		else if (nrComponents == 3)
+			format = GL_RGB;
+		else if (nrComponents == 4)
+			format = GL_RGBA;
+
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	if (data && nrChannels == 3)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else if (data && nrChannels == 4)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		stbi_image_free(data);
 	}
 	else
 	{
-		std::cout << "Failed to load texture "<< filename << std::endl;
+		std::cout << "Texture failed to load at path: " << filename << std::endl;
+		stbi_image_free(data);
 	}
 
-	stbi_image_free(data);
-	return GLtexture;
+	return textureID;
 }
 
 unsigned int Texture::Create3D(int width, int height, int depth, void * data)

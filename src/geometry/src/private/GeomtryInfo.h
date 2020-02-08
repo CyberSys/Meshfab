@@ -19,6 +19,7 @@ struct GeomtryInfo
 	unsigned int vao;
 	unsigned int vbo;
 	unsigned int nbo;
+	unsigned int uvbo;
 	unsigned int cbo;
 	unsigned int ibo;
 

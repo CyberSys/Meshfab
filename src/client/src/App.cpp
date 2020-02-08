@@ -51,8 +51,6 @@ void Application::run()
 	renderer.init(window_width, window_height);
 
 	//add some features to my viewer here
-	Actions::Add_Grid();
-	Actions::Add_BBox();
 
 	//main loop
 	while (!glfwWindowShouldClose(window))
