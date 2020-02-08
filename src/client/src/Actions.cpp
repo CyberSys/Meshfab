@@ -126,6 +126,7 @@ void Actions::Excute()
 		case KIND_ADD_MODEL:
 			{
 				//{D:\\_GameEngines_Assets\\Models\\vigtation\\Tree 02\\Tree.obj}
+				//D:\\Mixamo_Animations\\Jumping.fbx
 				//CG module
 				vector<GeomtryInfo> new_model = 
 					Shape3D::Create_Model("D:\\Mixamo_Animations\\Jumping.fbx");
@@ -135,19 +136,6 @@ void Actions::Excute()
 				{
 					//send model parts to renderer as seperate objs
 					SceneObject *new_obj = new SceneObject(part);
-
-					//adjust transformations to fit in viewer.
-					{
-						glm::vec3 delta = part.bmin - part.bmax;
-						glm::vec3 vhalf = part.bmax + (delta / 2.0f);
-						float scale = 10.0f / glm::length(delta);
-						new_obj->transformation.matrix =
-							glm::scale(glm::mat4(1), glm::vec3(scale)) * glm::translate(glm::mat4(1), -vhalf);
-					
-						new_obj->buffers.bmax = glm::scale(glm::mat4(1), glm::vec3(scale)) * glm::translate(glm::mat4(1), -vhalf) * glm::vec4(part.bmax,1);
-						new_obj->buffers.bmin = glm::scale(glm::mat4(1), glm::vec3(scale)) * glm::translate(glm::mat4(1), -vhalf) * glm::vec4(part.bmin,1);
-					}
-
 					Scene::Add(new_obj);
 				}
 			}

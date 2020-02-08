@@ -47,6 +47,81 @@ void aimat4_to_glmat4(aiMatrix4x4& prevmat, glm::mat4& newmat)
 	}
 }
 
+//-------------------------------------------------------------------------------
+// Calculate the boundaries of a given node and all of its children
+// The boundaries are in Worldspace (AABB)
+// piNode Input node
+// p_avOut Receives the min/max boundaries. Must point to 2 vec3s
+// piMatrix Transformation matrix of the graph at this position
+//-------------------------------------------------------------------------------
+int CalculateBounds(aiScene* scene, aiNode* piNode, glm::vec3* Out, const aiMatrix4x4& piMatrix) {
+
+	aiMatrix4x4 mTemp = piNode->mTransformation;
+	aiMatrix4x4 aiMe = mTemp * piMatrix;
+
+	for (unsigned int i = 0; i < piNode->mNumMeshes; ++i)
+	{
+		for (unsigned int a = 0; a < scene->mMeshes[
+			piNode->mMeshes[i]]->mNumVertices; ++a)
+		{
+			aiVector3D pc = scene->mMeshes[piNode->mMeshes[i]]->mVertices[a];
+
+			glm::vec4 v(pc.x, pc.y, pc.z, 1);
+			glm::mat4 trans(1);
+			aimat4_to_glmat4(aiMe, trans);
+			glm::vec3 res_vec = trans * v;
+
+
+			Out[0].x = glm::min(Out[0].x, v.x);
+			Out[0].y = glm::min(Out[0].y, v.y);
+			Out[0].z = glm::min(Out[0].z, v.z);
+			Out[1].x = glm::max(Out[1].x, v.x);
+			Out[1].y = glm::max(Out[1].y, v.y);
+			Out[1].z = glm::max(Out[1].z, v.z);
+		}
+	}
+	for (unsigned int i = 0; i < piNode->mNumChildren; ++i)
+	{
+		CalculateBounds(scene, piNode->mChildren[i], Out, aiMe);
+	}
+	return 1;
+}
+
+//-------------------------------------------------------------------------------
+// Scale the asset that it fits perfectly into the viewer window
+// The function calculates the boundaries of the mesh and modifies the
+// global world transformation matrix according to the aset AABB
+//-------------------------------------------------------------------------------
+inline static void ScaleModel(aiScene* scene, glm::vec3& max, glm::vec3& min,vector<float>& vertices)
+{
+	glm::vec3 minmax[2] = {glm::vec3(1e10f, 1e10f, 1e10f),glm::vec3(-1e10f, -1e10f, -1e10f)};
+	aiMatrix4x4 m;
+	CalculateBounds(scene,scene->mRootNode,minmax,m);
+
+	min = minmax[0];
+	max = minmax[1];
+
+	glm::vec3 delta = max - min;
+	glm::vec3 vhalf = min + (delta / 2.0f);
+	float scale = 10.0f / glm::length(delta);
+	glm::mat4 trans = glm::translate(glm::mat4(1), -vhalf) * glm::scale(glm::mat4(1), glm::vec3(scale));
+
+	//update vertices with new scale
+	for (size_t i = 0; i < vertices.size(); i += 3)
+	{
+		glm::vec4 vert(vertices[i],vertices[i + 1],vertices[i + 2], 1.0f);
+
+		glm::vec3 result = vert * trans;
+		vertices[i] = result.x;
+		vertices[i + 1] = result.y;
+		vertices[i + 2] = result.z;
+	}
+
+	//update max & min values
+	max =  glm::translate(glm::mat4(1), -vhalf) * glm::vec4(max, 1)*glm::scale(glm::mat4(1), glm::vec3(scale));
+	min =  glm::translate(glm::mat4(1), -vhalf) * glm::vec4(min, 1)*glm::scale(glm::mat4(1), glm::vec3(scale));
+}
+
 struct node_transform
 {
 	glm::mat4 node_trans;
@@ -100,7 +175,6 @@ vector<Part> Model::Load(const char * filename)
 		aiProcess_LimitBoneWeights | // limit bone weights to 4 per vertex
 		aiProcess_OptimizeMeshes | // join small meshes, if possible;
 		aiProcess_SplitByBoneCount | // split meshes with too many bones. Necessary for our (limited) hardware skinning shader
-		aiProcess_GenBoundingBoxes | // generate bounding box values
 		0;
 
 		aiScene* scene = (aiScene*)aiImportFileExWithProperties(filename,
@@ -223,6 +297,7 @@ vector<Part> Model::Load(const char * filename)
 				modelpart.indices.push_back(mesh->mFaces[x].mIndices[a]);
 			}
 		}
+
 		modelparts.push_back(modelpart);
 	}
 
@@ -244,6 +319,11 @@ vector<Part> Model::Load(const char * filename)
 				modelparts[meshindx].vertices[i + 1] = result.y;
 				modelparts[meshindx].vertices[i + 2] = result.z;
 			}
+
+			//dont forget to scale model to fit on screen
+			ScaleModel(scene,modelparts[meshindx].bounding_max,
+					modelparts[meshindx].bounding_min,
+					modelparts[meshindx].vertices);
 		}
 	}
 
