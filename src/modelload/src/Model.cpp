@@ -104,22 +104,21 @@ inline static void ScaleModel(aiScene* scene, glm::vec3& max, glm::vec3& min,vec
 	glm::vec3 delta = max - min;
 	glm::vec3 vhalf = min + (delta / 2.0f);
 	float scale = 10.0f / glm::length(delta);
-	glm::mat4 trans = glm::translate(glm::mat4(1), -vhalf) * glm::scale(glm::mat4(1), glm::vec3(scale));
 
 	//update vertices with new scale
 	for (size_t i = 0; i < vertices.size(); i += 3)
 	{
 		glm::vec4 vert(vertices[i],vertices[i + 1],vertices[i + 2], 1.0f);
 
-		glm::vec3 result = vert * trans;
-		vertices[i] = result.x;
+		glm::vec3 result = glm::translate(glm::mat4(1), -vhalf) * vert *glm::scale(glm::mat4(1), glm::vec3(scale));
+		vertices[i]		= result.x;
 		vertices[i + 1] = result.y;
 		vertices[i + 2] = result.z;
 	}
 
 	//update max & min values
-	max =  glm::translate(glm::mat4(1), -vhalf) * glm::vec4(max, 1)*glm::scale(glm::mat4(1), glm::vec3(scale));
-	min =  glm::translate(glm::mat4(1), -vhalf) * glm::vec4(min, 1)*glm::scale(glm::mat4(1), glm::vec3(scale));
+	max =  glm::translate(glm::mat4(1), -vhalf) * glm::vec4(max, 1) * glm::scale(glm::mat4(1), glm::vec3(scale));
+	min =  glm::translate(glm::mat4(1), -vhalf) * glm::vec4(min, 1) * glm::scale(glm::mat4(1), glm::vec3(scale));
 }
 
 struct node_transform
@@ -198,6 +197,7 @@ vector<Part> Model::Load(const char * filename)
 	if (scene == NULL)
 	{
 		printf("faild to load this file !! \n");
+		//return vector<Part>();
 	}
 
 	vector<Part> modelparts;
@@ -308,22 +308,22 @@ vector<Part> Model::Load(const char * filename)
 	{
 		for (auto meshindx : el.mesh_indx)
 		{
-			for (size_t i = 0; i < modelparts[meshindx].vertices.size(); i += 3)
-			{
-				glm::vec4 vert(modelparts[meshindx].vertices[i],
-					modelparts[meshindx].vertices[i + 1],
-					modelparts[meshindx].vertices[i + 2], 1.0f);
-
-				glm::vec3 result = vert * el.node_trans;
-				modelparts[meshindx].vertices[i] = result.x;
-				modelparts[meshindx].vertices[i + 1] = result.y;
-				modelparts[meshindx].vertices[i + 2] = result.z;
-			}
-
 			//dont forget to scale model to fit on screen
-			ScaleModel(scene,modelparts[meshindx].bounding_max,
-					modelparts[meshindx].bounding_min,
-					modelparts[meshindx].vertices);
+			ScaleModel(scene, modelparts[meshindx].bounding_max,
+				modelparts[meshindx].bounding_min,
+				modelparts[meshindx].vertices);
+
+			//for (size_t i = 0; i < modelparts[meshindx].vertices.size(); i += 3)
+			//{
+			//	glm::vec4 vert(modelparts[meshindx].vertices[i],
+			//		modelparts[meshindx].vertices[i + 1],
+			//		modelparts[meshindx].vertices[i + 2], 1.0f);
+			//
+			//	glm::vec3 result = vert * el.node_trans;
+			//	modelparts[meshindx].vertices[i] = result.x;
+			//	modelparts[meshindx].vertices[i + 1] = result.y;
+			//	modelparts[meshindx].vertices[i + 2] = result.z;
+			//}
 		}
 	}
 
