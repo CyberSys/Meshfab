@@ -129,7 +129,7 @@ void Actions::Excute()
 				//D:\\Mixamo_Animations\\Jumping.fbx
 				//CG module
 				vector<GeomtryInfo> new_model = 
-					Shape3D::Create_Model("D:\\Mixamo_Animations\\Jumping.fbx");
+					Shape3D::Create_Model("D:\\Hangar.fbx");
 
 				//renderer module
 				for (auto part : new_model)
