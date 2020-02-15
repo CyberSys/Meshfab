@@ -4,14 +4,13 @@ project ("QT-VIEWER")
 
 # list the header files
 set(HEADER_FILES
+	src/Window.h
 )
 
 # list the source files
 set(SOURCE_FILES
 	src/main.cpp
-
-	src/Application.h
-	src/Application.cpp
+	src/Window.cpp
 )
 
 # link with qt5
@@ -59,7 +58,6 @@ add_custom_command(
 	${CMAKE_CURRENT_SOURCE_DIR}/external/glew/bin/x64/glew32.dll
 	 $<TARGET_FILE_DIR:QT-VIEWER>
 )
-
 else("${CMAKE_SIZEOF_VOID_P}" EQUAL "4")
 add_custom_command(
     TARGET QT-VIEWER POST_BUILD
@@ -73,8 +71,20 @@ add_custom_command(
 	${CMAKE_CURRENT_SOURCE_DIR}/external/glew/bin/Win32/glew32.dll
 	 $<TARGET_FILE_DIR:QT-VIEWER>
 )
-
 ENDIF()
+
+# copy resources folder to exe folder
+add_custom_command(
+    TARGET QT-VIEWER PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+	${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:QT-VIEWER>/resources
+)
+# copy resources folder to .sln folder
+add_custom_command(
+    TARGET QT-VIEWER PRE_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+	${CMAKE_SOURCE_DIR}/resources ${CMAKE_BINARY_DIR}/resources
+)
 
 # Windows specfic flags to enable W variations of winapi
 if(WIN32)

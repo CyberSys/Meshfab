@@ -1,12 +1,14 @@
-#include "Application.h"
-#include <QtWidgets/QApplication>
-#include <QtWidgets>
+#include <QApplication>
+#include <QDesktopWidget>
+#include "Window.h"
 
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
-	QWidget window;
-	window.resize(320, 240);
-	window.show();
+	QCoreApplication::setApplicationName("Meshfab");
+	QCoreApplication::setOrganizationName("sha3lan");
+	Window w;
+	w.resize(w.sizeHint());
+	w.showMaximized();
 	return a.exec();
 }
