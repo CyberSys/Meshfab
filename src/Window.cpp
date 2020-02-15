@@ -4,7 +4,7 @@ Window::Window()
 {
 	// window menubar
 	menuBar = new QMenuBar;
-	menuFile = menuBar->addMenu(tr("&File"));
+	//menuFile = menuBar->addMenu(tr("&File"));
 	setMenuBar(menuBar);
 
 	{ // side toolbar
@@ -16,6 +16,14 @@ Window::Window()
 		QAction *import_action = V_toolbar->addAction(QIcon(import_icon), "Import");
 		connect(import_action, &QAction::triggered, this, &Window::Import);
 	}
+
+	app = new App();
+	setCentralWidget(app);
+}
+
+Window::~Window()
+{
+	delete app;
 }
 
 void Window::Import()

@@ -4,6 +4,8 @@
 #include <QMenu>
 #include <QToolBar>
 
+#include "App.h"
+
 class Window : public QMainWindow
 {
 	Q_OBJECT
@@ -13,6 +15,9 @@ private slots:
 
 public:
 	Window();
+	~Window();
+
+	App *app;
 
 	// winodw components..
 	QMenuBar *menuBar;

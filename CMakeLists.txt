@@ -5,12 +5,14 @@ project ("QT-VIEWER")
 # list the header files
 set(HEADER_FILES
 	src/Window.h
+	src/App.h
 )
 
 # list the source files
 set(SOURCE_FILES
 	src/main.cpp
 	src/Window.cpp
+	src/App.cpp
 )
 
 # link with qt5
