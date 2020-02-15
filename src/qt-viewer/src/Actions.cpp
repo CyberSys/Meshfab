@@ -67,13 +67,12 @@ void Actions::Add_BBox()
 	list.push_front(action);
 }
 
-void Actions::Input_MousePress(int button, int act, int mods, double xpos, double ypos)
+void Actions::Input_MousePress(int button, int act, double xpos, double ypos)
 {
 	Action action;
 	action.kind = KIND_INPUT_MOUSE;
 	action.mouse.press = act;
 	action.mouse.button = button;
-	action.mouse.mods = mods;
 	action.mouse.press_posx = xpos;
 	action.mouse.press_posy = ypos;
 	list.push_front(action);
@@ -158,14 +157,14 @@ void Actions::Excute()
 		//inputs
 		case KIND_INPUT_MOUSE:
 			{
-				if (action.mouse.button == 0 && action.mouse.press == 1)
+				if (action.mouse.button == 1 && action.mouse.press == 1)
 				{
 					Renderer::camera.mouseLeftDown = true;
 					Renderer::camera.prevX = (float)action.mouse.press_posx;
 					Renderer::camera.prevY = (float)action.mouse.press_posy;
 					Renderer::camera.prevquat = Renderer::camera.quat;
 				}
-				else if (action.mouse.button == 0 && action.mouse.press == 0)
+				else if (action.mouse.button == 1 && action.mouse.press == 0)
 				{
 					Renderer::camera.mouseLeftDown = false;
 				}

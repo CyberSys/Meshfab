@@ -25,7 +25,7 @@ void get_mesh_texture(aiScene* scene, const aiMesh* mesh, const char* directory,
 		if(aiGetMaterialString(material,AI_MATKEY_TEXTURE_DIFFUSE(0),&Path) == AI_SUCCESS)
 		{
 			string fullpath(directory);
-			fullpath += '\\';
+			fullpath += '/';
 			fullpath += Path.C_Str();
 			auto id = Texture::Create2D(fullpath.c_str());
 			textures.push_back(id);

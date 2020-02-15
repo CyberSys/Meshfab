@@ -28,7 +28,6 @@ struct Action
 		{
 			int button;
 			int press;
-			int mods;
 			double press_posx;
 			double press_posy;
 		}mouse;
@@ -63,7 +62,7 @@ public:
 	static void Add_BBox();
 
 	//actions-inputs
-	static void Input_MousePress(int button, int act, int mods, double xpos, double ypos);
+	static void Input_MousePress(int button, int act, double xpos, double ypos);
 	static void Input_CursorMove(double xpos, double ypos);
 	static void Input_MouseWheel(double xoffset, double yoffset);
 

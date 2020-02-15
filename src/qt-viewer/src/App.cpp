@@ -1,6 +1,7 @@
 #include "App.h"
 #include "Actions.h"
 
+#include <QKeyEvent>
 #include <iostream>
 
 App::App(QWidget *parent) : QOpenGLWidget(parent)
@@ -49,6 +50,8 @@ void App::paintGL()
 		renderer.frame.end();
 		renderer.flush(renderer.frame.ColorTexture_Get());
 	}
+
+	update();
 }
 
 void App::resizeGL(int width, int height)
@@ -61,18 +64,31 @@ void App::resizeGL(int width, int height)
 
 void App::mousePressEvent(QMouseEvent * event)
 {
+	Actions::Input_MousePress(
+		event->button(),
+		1,
+		event->pos().x(),
+		event->pos().y());
 }
 
 void App::mouseReleaseEvent(QMouseEvent * event)
 {
+		Actions::Input_MousePress(
+		event->button(),
+		0,
+		event->pos().x(),
+		event->pos().y());
 }
 
 void App::mouseMoveEvent(QMouseEvent * event)
 {
+	Actions::Input_CursorMove(event->pos().x(), event->pos().y());
 }
 
 void App::wheelEvent(QWheelEvent * event)
 {
+	QPoint numDegrees = event->angleDelta() / 8;
+	Actions::Input_MouseWheel(0, numDegrees.y() / 10);
 }
 
 void App::keyPressEvent(QKeyEvent * event)
