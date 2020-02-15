@@ -6,6 +6,7 @@ project ("QT-VIEWER")
 set(HEADER_FILES
 	src/Window.h
 	src/App.h
+	src/Actions.h
 )
 
 # list the source files
@@ -13,6 +14,7 @@ set(SOURCE_FILES
 	src/main.cpp
 	src/Window.cpp
 	src/App.cpp
+	src/Actions.cpp
 )
 
 # link with qt5
@@ -44,6 +46,11 @@ target_link_libraries(QT-VIEWER
 		${QT_LIBS}
 		opengl32
 		glew32
+
+		#system modules.
+		Renderer
+		Geometry
+		Texturing
 )
 
 if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
@@ -59,6 +66,10 @@ add_custom_command(
 	COMMAND ${CMAKE_COMMAND} -E copy 
 	${CMAKE_CURRENT_SOURCE_DIR}/external/glew/bin/x64/glew32.dll
 	 $<TARGET_FILE_DIR:QT-VIEWER>
+
+	COMMAND ${CMAKE_COMMAND} -E copy 
+	${CMAKE_CURRENT_SOURCE_DIR}/external/assimp/x64/assimp-vc141-mt.dll
+	$<TARGET_FILE_DIR:QT-VIEWER>
 )
 else("${CMAKE_SIZEOF_VOID_P}" EQUAL "4")
 add_custom_command(
@@ -72,6 +83,10 @@ add_custom_command(
 	COMMAND ${CMAKE_COMMAND} -E copy 
 	${CMAKE_CURRENT_SOURCE_DIR}/external/glew/bin/Win32/glew32.dll
 	 $<TARGET_FILE_DIR:QT-VIEWER>
+
+	COMMAND ${CMAKE_COMMAND} -E copy 
+	${CMAKE_CURRENT_SOURCE_DIR}/external/assimp/Win32/assimp-vc141-mt.dll
+	$<TARGET_FILE_DIR:QT-VIEWER>
 )
 ENDIF()
 
@@ -117,6 +132,11 @@ target_include_directories(QT-VIEWER
 	PUBLIC
 	${CMAKE_CURRENT_SOURCE_DIR}/external/glew/include
 	${CMAKE_CURRENT_SOURCE_DIR}/external/glm
+
+	#system modules includes
+	${Renderer_INCLUDE_DIRS}/
+	${Geometry_INCLUDE_DIRS}/
+	${Texturing_INCLUDE_DIRS}/
 )
 
 # list Libs directories

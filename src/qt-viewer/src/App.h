@@ -2,6 +2,8 @@
 #include <glew.h>
 #include <QOpenGLWidget>
 
+#include "renderer.h"
+
 class App : public QOpenGLWidget
 {
 	Q_OBJECT
@@ -26,5 +28,5 @@ protected:
 	void keyPressEvent(QKeyEvent *event) override;
 	void keyReleaseEvent(QKeyEvent *event) override;
 private:
-
+	Renderer renderer;
 };

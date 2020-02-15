@@ -1,4 +1,7 @@
 #include "Window.h"
+#include "Actions.h"
+
+#include <QFileDialog>
 
 Window::Window()
 {
@@ -28,4 +31,9 @@ Window::~Window()
 
 void Window::Import()
 {
+	//open file dialog and get path of this model
+	QString fileName = QFileDialog::getOpenFileName(this,tr("Open Model File"), "", tr(""));
+	filenamepath = fileName.toLocal8Bit();
+	char* file = filenamepath.data();
+	Actions::Add_Model(file);
 }

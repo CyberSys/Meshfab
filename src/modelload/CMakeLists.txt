@@ -34,24 +34,24 @@ target_link_libraries(ModelLoad
 )
 
 # copy assimp dll to exe folder
-#if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-#
-#add_custom_command(
-#    TARGET ModelLoad POST_BUILD
-#		
-#	COMMAND ${CMAKE_COMMAND} -E copy 
-#	${CMAKE_CURRENT_SOURCE_DIR}/external/assimp/x64/assimp-vc141-mt.dll
-#	 $<TARGET_FILE_DIR:QT-VIEWER>
-#)
-#else("${CMAKE_SIZEOF_VOID_P}" EQUAL "4")
-#add_custom_command(
-#    TARGET ModelLoad POST_BUILD
-#		
-#	COMMAND ${CMAKE_COMMAND} -E copy 
-#	${CMAKE_CURRENT_SOURCE_DIR}/external/assimp/Win32/assimp-vc141-mt.dll
-#	 $<TARGET_FILE_DIR:QT-VIEWER>
-#)
-#ENDIF()
+if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+
+add_custom_command(
+    TARGET ModelLoad POST_BUILD
+		
+	COMMAND ${CMAKE_COMMAND} -E copy 
+	${CMAKE_CURRENT_SOURCE_DIR}/external/assimp/x64/assimp-vc141-mt.dll
+	$<TARGET_FILE_DIR:ModelLoad>
+)
+else("${CMAKE_SIZEOF_VOID_P}" EQUAL "4")
+add_custom_command(
+    TARGET ModelLoad POST_BUILD
+		
+	COMMAND ${CMAKE_COMMAND} -E copy 
+	${CMAKE_CURRENT_SOURCE_DIR}/external/assimp/Win32/assimp-vc141-mt.dll
+	 $<TARGET_FILE_DIR:ModelLoad>
+)
+ENDIF()
 
 if(WIN32)
 	target_compile_definitions(ModelLoad

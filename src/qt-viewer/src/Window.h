@@ -23,4 +23,5 @@ public:
 	QMenuBar *menuBar;
 	QMenu *menuFile;
 	QToolBar *V_toolbar;
+	QByteArray filenamepath;
 };
