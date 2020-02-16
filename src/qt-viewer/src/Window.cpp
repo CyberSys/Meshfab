@@ -27,6 +27,9 @@ Window::Window()
 		QPixmap wireframe_icon("resources/wireframe.png");
 		QAction *wireframe_action = V_toolbar->addAction(QIcon(wireframe_icon), "Wireframe");
 		//connect(import_action, &QAction::triggered, this, &Window::Import);
+		QPixmap bbox_icon("resources/boundingbox.png");
+		QAction *bbox_action = V_toolbar->addAction(QIcon(bbox_icon), "Bounding Box");
+		//connect(import_action, &QAction::triggered, this, &Window::Import);
 	}
 
 	app = new App();
