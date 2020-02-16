@@ -18,6 +18,15 @@ Window::Window()
 		QPixmap import_icon("resources/import.png");
 		QAction *import_action = V_toolbar->addAction(QIcon(import_icon), "Import");
 		connect(import_action, &QAction::triggered, this, &Window::Import);
+		QPixmap select_icon("resources/select.png");
+		QAction *select_action = V_toolbar->addAction(QIcon(select_icon), "Select");
+		//connect(import_action, &QAction::triggered, this, &Window::Import);
+		QPixmap shaders_icon("resources/shader.png");
+		QAction *shaders_action = V_toolbar->addAction(QIcon(shaders_icon), "Shaders");
+		//connect(import_action, &QAction::triggered, this, &Window::Import);
+		QPixmap wireframe_icon("resources/wireframe.png");
+		QAction *wireframe_action = V_toolbar->addAction(QIcon(wireframe_icon), "Wireframe");
+		//connect(import_action, &QAction::triggered, this, &Window::Import);
 	}
 
 	app = new App();
@@ -35,5 +44,6 @@ void Window::Import()
 	QString fileName = QFileDialog::getOpenFileName(this,tr("Open Model File"), "", tr(""));
 	filenamepath = fileName.toLocal8Bit();
 	char* file = filenamepath.data();
-	Actions::Add_Model(file);
+
+	if(fileName.count() > 0) Actions::Add_Model(file);
 }
