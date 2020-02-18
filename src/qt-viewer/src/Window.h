@@ -5,6 +5,7 @@
 #include <QToolBar>
 
 #include "App.h"
+#include "Shaders_Window.h"
 
 class Window : public QMainWindow
 {
@@ -12,6 +13,7 @@ class Window : public QMainWindow
 
 private slots:
 	void Import();
+	void Active_Shaders_Panel();
 	void Active_BoundingBox();
 	void Active_Wireframe();
 
@@ -20,6 +22,7 @@ public:
 	~Window();
 
 	App *app;
+	Shader_Window* shader_window;
 
 	// winodw components..
 	QMenuBar *menuBar;

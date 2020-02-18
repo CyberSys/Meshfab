@@ -5,6 +5,7 @@ project ("QT-VIEWER")
 # list the header files
 set(HEADER_FILES
 	src/Window.h
+	src/Shaders_Window.h
 	src/App.h
 	src/Actions.h
 )
@@ -13,6 +14,7 @@ set(HEADER_FILES
 set(SOURCE_FILES
 	src/main.cpp
 	src/Window.cpp
+	src/Shaders_Window.cpp
 	src/App.cpp
 	src/Actions.cpp
 )

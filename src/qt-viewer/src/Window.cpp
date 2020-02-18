@@ -3,7 +3,9 @@
 
 #include <QFileDialog>
 
-Window::Window()
+Window::Window() 
+	: shader_window(nullptr),
+	  menuFile(nullptr)
 {
 	// window menubar
 	menuBar = new QMenuBar;
@@ -23,7 +25,7 @@ Window::Window()
 		//connect(import_action, &QAction::triggered, this, &Window::Import);
 		QPixmap shaders_icon("resources/shader.png");
 		QAction *shaders_action = V_toolbar->addAction(QIcon(shaders_icon), "Shaders");
-		//connect(import_action, &QAction::triggered, this, &Window::Import);
+		connect(shaders_action, &QAction::triggered, this, &Window::Active_Shaders_Panel);
 		QPixmap wireframe_icon("resources/wireframe.png");
 		QAction *wireframe_action = V_toolbar->addAction(QIcon(wireframe_icon), "Wireframe");
 		connect(wireframe_action, &QAction::triggered, this, &Window::Active_Wireframe);
@@ -38,10 +40,11 @@ Window::Window()
 
 Window::~Window()
 {
-	delete app;
-	delete menuBar;
-	delete menuFile;
-	delete V_toolbar;
+	if(app) delete app;
+	if(menuBar) delete menuBar;
+	if(menuFile) delete menuFile;
+	if(V_toolbar) delete V_toolbar;
+	if(shader_window) delete shader_window;
 }
 
 void Window::Import()
@@ -52,6 +55,24 @@ void Window::Import()
 	char* file = filenamepath.data();
 
 	if(fileName.count() > 0) Actions::Add_Model(file);
+}
+
+void Window::Active_Shaders_Panel()
+{
+	if(!shader_window)
+	{
+		shader_window = new Shader_Window(this);
+		int posX = app->geometry().topLeft().x();
+		int posY = app->geometry().topLeft().y();
+		shader_window->SetPosition(posX + 7, posY + 7);
+		shader_window->show();
+	}
+	else
+	{
+		delete shader_window;
+		shader_window = nullptr;
+	}
+
 }
 
 void Window::Active_BoundingBox()
