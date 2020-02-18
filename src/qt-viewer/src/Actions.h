@@ -1,6 +1,9 @@
 #pragma once
 #include <list>
 
+//renderer module
+#include "Scene.h"
+
 enum Action_Kind
 {
 	KIND_ADD_CUBE,
@@ -11,6 +14,9 @@ enum Action_Kind
 	KIND_ADD_VOLUME,
 	KIND_ADD_GRID,
 	KIND_ADD_BBOX,
+
+	//activate
+	KIND_ACTIVE_WIREFRAME,
 
 	//inputs
 	KIND_INPUT_MOUSE,
@@ -60,6 +66,9 @@ public:
 	static void Add_Volume();
 	static void Add_Grid();
 	static void Add_BBox();
+
+	//activate states
+	static void Active_Wireframe();
 
 	//actions-inputs
 	static void Input_MousePress(int button, int act, double xpos, double ypos);

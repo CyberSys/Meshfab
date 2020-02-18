@@ -2,7 +2,6 @@
 #include <assert.h>
 
 //renderer module
-#include "Scene.h"
 #include "renderer.h"
 
 //geomtry module
@@ -64,6 +63,13 @@ void Actions::Add_BBox()
 {
 	Action action;
 	action.kind = KIND_ADD_BBOX;
+	list.push_front(action);
+}
+
+void Actions::Active_Wireframe()
+{
+	Action action;
+	action.kind = KIND_ACTIVE_WIREFRAME;
 	list.push_front(action);
 }
 
@@ -148,10 +154,27 @@ void Actions::Excute()
 			break;
 		case KIND_ADD_BBOX:
 		{
-			//CG module
-			GeomtryInfo bbox = Shape3D::Create_BBox();
-			SceneObject *new_obj = new SceneObject(bbox);
-			Scene::viewer_bbox = new_obj;
+			if (Scene::viewer_bbox) 
+			{
+				delete Scene::viewer_bbox;
+				Scene::viewer_bbox = nullptr;
+			}
+			else
+			{
+				//CG module
+				GeomtryInfo bbox = Shape3D::Create_BBox();
+				SceneObject *new_obj = new SceneObject(bbox);
+				Scene::viewer_bbox = new_obj;
+			}
+		}
+		break;
+		//activate
+		case KIND_ACTIVE_WIREFRAME:
+		{
+			if (Scene::draw_mode == DrawMode::KIND_FILLED)
+				Scene::draw_mode = DrawMode::KIND_WIREFRAME;
+			else
+				Scene::draw_mode = DrawMode::KIND_FILLED;
 		}
 		break;
 		//inputs

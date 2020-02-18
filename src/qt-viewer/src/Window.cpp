@@ -26,10 +26,10 @@ Window::Window()
 		//connect(import_action, &QAction::triggered, this, &Window::Import);
 		QPixmap wireframe_icon("resources/wireframe.png");
 		QAction *wireframe_action = V_toolbar->addAction(QIcon(wireframe_icon), "Wireframe");
-		//connect(import_action, &QAction::triggered, this, &Window::Import);
+		connect(wireframe_action, &QAction::triggered, this, &Window::Active_Wireframe);
 		QPixmap bbox_icon("resources/boundingbox.png");
 		QAction *bbox_action = V_toolbar->addAction(QIcon(bbox_icon), "Bounding Box");
-		//connect(import_action, &QAction::triggered, this, &Window::Import);
+		connect(bbox_action, &QAction::triggered, this, &Window::Active_BoundingBox);
 	}
 
 	app = new App();
@@ -39,6 +39,9 @@ Window::Window()
 Window::~Window()
 {
 	delete app;
+	delete menuBar;
+	delete menuFile;
+	delete V_toolbar;
 }
 
 void Window::Import()
@@ -49,4 +52,14 @@ void Window::Import()
 	char* file = filenamepath.data();
 
 	if(fileName.count() > 0) Actions::Add_Model(file);
+}
+
+void Window::Active_BoundingBox()
+{
+	Actions::Add_BBox();
+}
+
+void Window::Active_Wireframe()
+{
+	Actions::Active_Wireframe();
 }

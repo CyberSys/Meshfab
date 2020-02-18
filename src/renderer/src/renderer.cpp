@@ -140,14 +140,9 @@ rendermode(DrawMode mode)
 {
 	switch (mode)
 	{
-	case KIND_TRIANGLE:
+	case KIND_WIREFRAME:
+	case KIND_FILLED:
 		return GL_TRIANGLES;
-		break;
-	case KIND_LINES:
-		return GL_LINES;
-		break;
-	case KIND_LINE_LOOP:
-		return GL_LINE_LOOP;
 		break;
 	default:
 		return 0;
@@ -170,7 +165,8 @@ void Renderer::Draw_sceneobjs(DrawMode mode)
 	for (auto obj : Scene::scene_objs)
 	{
 		//draw bounding box
-		Draw_boundingbox(Scene::viewer_bbox, obj->buffers.bmax, obj->buffers.bmin);
+		if(Scene::viewer_bbox)
+			Draw_boundingbox(Scene::viewer_bbox, obj->buffers.bmax, obj->buffers.bmin);
 
 		//calculate vp camera matrix..
 		obj->transformation.vp_matrix =
@@ -184,7 +180,16 @@ void Renderer::Draw_sceneobjs(DrawMode mode)
 			glBindVertexArray(obj->buffers.vao);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, obj->buffers.ibo);
 
-			glDrawElements(rendermode(mode), obj->buffers.num_indecies, GL_UNSIGNED_INT, 0);
+			if (mode == DrawMode::KIND_FILLED)
+			{
+				glDrawElements(rendermode(mode), obj->buffers.num_indecies, GL_UNSIGNED_INT, 0);
+			}
+			else if(mode == DrawMode::KIND_WIREFRAME)
+			{
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				glDrawElements(rendermode(mode), obj->buffers.num_indecies, GL_UNSIGNED_INT, 0);
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			}
 		}
 	}
 }

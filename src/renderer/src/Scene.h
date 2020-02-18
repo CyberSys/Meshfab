@@ -12,4 +12,6 @@ public:
 
 	static SceneObject* viewer_grid;
 	static SceneObject* viewer_bbox;
+
+	static DrawMode draw_mode;
 };

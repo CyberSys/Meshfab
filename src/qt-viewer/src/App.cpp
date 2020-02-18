@@ -25,9 +25,6 @@ void App::initializeGL()
 	glEnable(GL_BLEND);
 
 	renderer.init(100, 100);
-
-	//add some features to my viewer here
-	Actions::Add_BBox();
 }
 
 void App::paintGL()
@@ -44,7 +41,7 @@ void App::paintGL()
 		renderer.frame.begin();
 
 		//draw all scene objects
-		renderer.Draw_sceneobjs(DrawMode::KIND_TRIANGLE);
+		renderer.Draw_sceneobjs(Scene::draw_mode);
 
 		//end the frame rendering and flush.
 		renderer.frame.end();

@@ -12,6 +12,12 @@ enum MaterialType
 	Diffuse
 };
 
+enum DrawMode
+{
+	KIND_FILLED,
+	KIND_WIREFRAME
+};
+
 class SceneObject
 {
 public:

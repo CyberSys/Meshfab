@@ -8,13 +8,6 @@
 #include <vector>
 using namespace std;
 
-enum DrawMode
-{
-	KIND_TRIANGLE,
-	KIND_LINES,
-	KIND_LINE_LOOP
-};
-
 class Renderer
 {
 public:

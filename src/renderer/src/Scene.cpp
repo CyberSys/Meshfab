@@ -3,6 +3,7 @@
 std::vector<SceneObject*> Scene::scene_objs;
 SceneObject* Scene::viewer_grid = nullptr;
 SceneObject* Scene::viewer_bbox = nullptr;
+DrawMode Scene::draw_mode = DrawMode::KIND_FILLED;
 
 void Scene::Add(SceneObject * obj)
 {

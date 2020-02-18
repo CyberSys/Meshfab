@@ -12,6 +12,8 @@ class Window : public QMainWindow
 
 private slots:
 	void Import();
+	void Active_BoundingBox();
+	void Active_Wireframe();
 
 public:
 	Window();
