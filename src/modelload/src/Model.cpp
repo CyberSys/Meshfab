@@ -197,7 +197,7 @@ vector<Part> Model::Load(const char * filename)
 	if (scene == NULL)
 	{
 		printf("faild to load this file !! \n");
-		//return vector<Part>();
+		return vector<Part>();
 	}
 
 	vector<Part> modelparts;
