@@ -24,6 +24,9 @@ set(SOURCE_FILES
 	src/private/Grid.h
 	src/private/Grid.cpp
 	src/private/GeomtryInfo.h
+
+	src/private/GContainer.h
+	src/private/GContainer.cpp
 )
 
 # add library target

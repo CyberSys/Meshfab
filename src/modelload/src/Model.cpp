@@ -80,6 +80,7 @@ int CalculateBounds(aiScene* scene, aiNode* piNode, glm::vec3* Out, const aiMatr
 			Out[1].z = glm::max(Out[1].z, v.z);
 		}
 	}
+
 	for (unsigned int i = 0; i < piNode->mNumChildren; ++i)
 	{
 		CalculateBounds(scene, piNode->mChildren[i], Out, aiMe);
@@ -92,7 +93,7 @@ int CalculateBounds(aiScene* scene, aiNode* piNode, glm::vec3* Out, const aiMatr
 // The function calculates the boundaries of the mesh and modifies the
 // global world transformation matrix according to the aset AABB
 //-------------------------------------------------------------------------------
-inline static void ScaleModel(aiScene* scene, glm::vec3& max, glm::vec3& min,vector<float>& vertices)
+inline static void ScaleModel(aiScene* scene, glm::vec3& max, glm::vec3& min, glm::mat4& translatemat, glm::mat4& scalemat)
 {
 	glm::vec3 minmax[2] = {glm::vec3(1e10f, 1e10f, 1e10f),glm::vec3(-1e10f, -1e10f, -1e10f)};
 	aiMatrix4x4 m;
@@ -105,45 +106,14 @@ inline static void ScaleModel(aiScene* scene, glm::vec3& max, glm::vec3& min,vec
 	glm::vec3 vhalf = min + (delta / 2.0f);
 	float scale = 10.0f / glm::length(delta);
 
-	//update vertices with new scale
-	for (size_t i = 0; i < vertices.size(); i += 3)
-	{
-		glm::vec4 vert(vertices[i],vertices[i + 1],vertices[i + 2], 1.0f);
-
-		glm::vec3 result = glm::translate(glm::mat4(1), -vhalf) * vert *glm::scale(glm::mat4(1), glm::vec3(scale));
-		vertices[i]		= result.x;
-		vertices[i + 1] = result.y;
-		vertices[i + 2] = result.z;
-	}
+	translatemat = glm::translate(glm::mat4(1), -vhalf);
+	scalemat = glm::scale(glm::mat4(1), glm::vec3(scale));;
 
 	//update max & min values
-	max =  glm::translate(glm::mat4(1), -vhalf) * glm::vec4(max, 1) * glm::scale(glm::mat4(1), glm::vec3(scale));
-	min =  glm::translate(glm::mat4(1), -vhalf) * glm::vec4(min, 1) * glm::scale(glm::mat4(1), glm::vec3(scale));
+	max =  translatemat * glm::vec4(max, 1) * scalemat;
+	min =  translatemat * glm::vec4(min, 1) * scalemat;
 }
 
-struct node_transform
-{
-	glm::mat4 node_trans;
-	vector<unsigned int> mesh_indx;
-};
-
-void get_meshNode(aiNode* current,aiScene* scene,vector<node_transform>& mats)
-{
-	for(size_t i = 0 ; i < current->mNumChildren; ++i)
-		get_meshNode(current->mChildren[i],scene,mats);
-
-	if(current->mMeshes != NULL)
-	{
-		//this meshes perform with same transformation node
-		node_transform tr;
-		aimat4_to_glmat4(current->mTransformation,tr.node_trans);
-
-		for(size_t i = 0 ; i < current->mNumMeshes; ++i)
-			tr.mesh_indx.push_back(current->mMeshes[i]);
-
-		mats.push_back(tr);
-	}
-}
 
 /////////////////////////////////// Assimp file loader ...
 //we need to load all scene graph of the model to load it in mesh parts..
@@ -200,6 +170,13 @@ vector<Part> Model::Load(const char * filename)
 		return vector<Part>();
 	}
 
+	glm::vec3 _max;
+	glm::vec3 _min;
+	glm::mat4 translate;
+	glm::mat4 scale;
+	//dont forget to scale model to fit on screen
+	ScaleModel(scene, _max,_min,translate,scale);
+
 	vector<Part> modelparts;
 	
 	// loop on all meshes..
@@ -215,9 +192,11 @@ vector<Part> Model::Load(const char * filename)
 		for (size_t x = 0; x < mesh->mNumVertices; ++x)
 		{
 			// vertix positions
-			modelpart.vertices.push_back(mesh->mVertices[x].x);
-			modelpart.vertices.push_back(mesh->mVertices[x].y);
-			modelpart.vertices.push_back(mesh->mVertices[x].z);
+			glm::vec3 vert(mesh->mVertices[x].x,mesh->mVertices[x].y,mesh->mVertices[x].z);
+			vert = translate * glm::vec4(vert,1.0f) * scale;
+			modelpart.vertices.push_back(vert.x);
+			modelpart.vertices.push_back(vert.y);
+			modelpart.vertices.push_back(vert.z);
 
 			// normals
 			if (mesh->mNormals == NULL)
@@ -285,8 +264,8 @@ vector<Part> Model::Load(const char * filename)
 			// TODO
 
 			//bounding box
-			modelpart.bounding_max = glm::vec3(mesh->mAABB.mMax.x,mesh->mAABB.mMax.y,mesh->mAABB.mMax.z);
-			modelpart.bounding_min = glm::vec3(mesh->mAABB.mMin.x,mesh->mAABB.mMin.y,mesh->mAABB.mMin.z);
+			modelpart.bounding_max = _max;
+			modelpart.bounding_min = _min;
 		}
 
 		// fill index buffer
@@ -299,32 +278,6 @@ vector<Part> Model::Load(const char * filename)
 		}
 
 		modelparts.push_back(modelpart);
-	}
-
-	vector<node_transform> trans;
-	get_meshNode(scene->mRootNode,scene,trans);
-
-	for (auto el : trans)
-	{
-		for (auto meshindx : el.mesh_indx)
-		{
-			//dont forget to scale model to fit on screen
-			ScaleModel(scene, modelparts[meshindx].bounding_max,
-				modelparts[meshindx].bounding_min,
-				modelparts[meshindx].vertices);
-
-			//for (size_t i = 0; i < modelparts[meshindx].vertices.size(); i += 3)
-			//{
-			//	glm::vec4 vert(modelparts[meshindx].vertices[i],
-			//		modelparts[meshindx].vertices[i + 1],
-			//		modelparts[meshindx].vertices[i + 2], 1.0f);
-			//
-			//	glm::vec3 result = vert * el.node_trans;
-			//	modelparts[meshindx].vertices[i] = result.x;
-			//	modelparts[meshindx].vertices[i + 1] = result.y;
-			//	modelparts[meshindx].vertices[i + 2] = result.z;
-			//}
-		}
 	}
 
 	printf("Model Loading Finished .. \n");
